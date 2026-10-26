@@ -1,0 +1,48 @@
+# Local demo databases. Init scripts run ONLY for new named volumes.
+# DML/advanced-query demonstrations are intentionally not executed on startup.
+name: workload-management-system
+services:
+  mysql:
+    image: mysql:8.4
+    command: ["--default-time-zone=+05:30"]
+    environment:
+      MYSQL_DATABASE: workload_management_system
+      MYSQL_USER: wms_app
+      MYSQL_PASSWORD: ${WMS_MYSQL_PASSWORD:-wms_mysql_demo_password}
+      MYSQL_ROOT_PASSWORD: ${WMS_MYSQL_ROOT_PASSWORD:-wms_root_demo_password}
+    ports:
+      - "127.0.0.1:${WMS_MYSQL_PORT:-3307}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/mysql/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./database/mysql/02_seed.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
+      - ./database/mysql/04_views.sql:/docker-entrypoint-initdb.d/04_views.sql:ro
+      - ./database/mysql/05_procedures_functions.sql:/docker-entrypoint-initdb.d/05_procedures_functions.sql:ro
+      - ./database/mysql/06_triggers.sql:/docker-entrypoint-initdb.d/06_triggers.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=\"$${MYSQL_PASSWORD}\" mysql --protocol=TCP -h 127.0.0.1 -u\"$${MYSQL_USER}\" -D\"$${MYSQL_DATABASE}\" -e 'SELECT 1 FROM EMPLOYEE LIMIT 1' >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+  pgvector:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: workload_management_vectors
+      POSTGRES_USER: wms_app
+      POSTGRES_PASSWORD: ${WMS_PG_PASSWORD:-wms_pg_demo_password}
+      TZ: Asia/Kolkata
+    ports:
+      - "127.0.0.1:${WMS_PG_PORT:-5433}:5432"
+    volumes:
+      - pgvector_data:/var/lib/postgresql/data
+      - ./database/pgvector/01_setup.sql:/docker-entrypoint-initdb.d/01_setup.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "PGPASSWORD=\"$${POSTGRES_PASSWORD}\" psql -h 127.0.0.1 -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\" -tAc 'SELECT 1 FROM ai_work_summaries LIMIT 1' >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 15s
+volumes:
+  mysql_data:
+  pgvector_data:
