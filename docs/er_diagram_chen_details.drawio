@@ -1,0 +1,362 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="model" name="Chen ER model - details">
+    <mxGraphModel dx="2580" dy="1650" grid="1" gridSize="10" page="1" pageWidth="2580" pageHeight="1650">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="Workload Management System | Chen ER model, details" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=32;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="22" width="2480" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="This sheet completes er_diagram_chen.svg. The cross-engine snapshot association is logical, never an enforced foreign key." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=18;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="72" width="2480" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="" style="rounded=1;fillColor=#ffffff;strokeColor=#cfd9e8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="30" y="130" width="1240" height="710" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="E. Skills and line management" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="54" y="148" width="1192" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="The M:N skill relationship maps to EMPLOYEE_SKILL(emp_id, skill_id, proficiency)." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="54" y="183" width="1192" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="EMPLOYEE" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="100" y="310" width="190" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="emp_id" style="ellipse;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#e8f6ee;strokeColor=#3d7756;strokeWidth=2;fontStyle=5;" vertex="1" parent="1">
+          <mxGeometry x="120" y="238" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c8" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="195" y="278" as="sourcePoint" />
+            <mxPoint x="195" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c9" value="SKILL" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="990" y="310" width="190" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="c10" value="skill_id" style="ellipse;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#e8f6ee;strokeColor=#3d7756;strokeWidth=2;fontStyle=5;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="238" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c11" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1085" y="278" as="sourcePoint" />
+            <mxPoint x="1085" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c12" value="HAS SKILL" style="rhombus;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#fff1d6;strokeColor=#a86a0a;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="545" y="299" width="180" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="c13" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="290" y="337" as="sourcePoint" />
+            <mxPoint x="545" y="337" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c14" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="725" y="337" as="sourcePoint" />
+            <mxPoint x="990" y="337" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c15" value="M" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=17;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="345" y="296" width="170" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c16" value="N" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=17;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="755" y="296" width="190" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c17" value="Relationship attribute: proficiency. Composite key prevents duplicate employee/skill pairs." style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="330" y="380" width="650" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c18" value="proficiency" style="ellipse;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#e8f6ee;strokeColor=#3d7756;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="560" y="195" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c19" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="635" y="299" as="sourcePoint" />
+            <mxPoint x="635" y="235" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c20" value="EMPLOYEE (manager)" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="100" y="625" width="190" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="c21" value="emp_id" style="ellipse;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#e8f6ee;strokeColor=#3d7756;strokeWidth=2;fontStyle=5;" vertex="1" parent="1">
+          <mxGeometry x="120" y="553" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c22" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="195" y="593" as="sourcePoint" />
+            <mxPoint x="195" y="625" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c23" value="EMPLOYEE (report)" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="990" y="625" width="190" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="c24" value="emp_id" style="ellipse;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#e8f6ee;strokeColor=#3d7756;strokeWidth=2;fontStyle=5;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="553" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c25" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1085" y="593" as="sourcePoint" />
+            <mxPoint x="1085" y="625" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c26" value="MANAGES" style="rhombus;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#fff1d6;strokeColor=#a86a0a;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="545" y="614" width="180" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="c27" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="290" y="652" as="sourcePoint" />
+            <mxPoint x="545" y="652" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c28" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="725" y="652" as="sourcePoint" />
+            <mxPoint x="990" y="652" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c29" value="1" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=17;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="345" y="611" width="170" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c30" value="N" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=17;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="755" y="611" width="190" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c31" value="A report has 0..1 manager; a manager has 0..N reports. This is a recursive relationship." style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="330" y="695" width="650" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c32" value="" style="rounded=1;fillColor=#ffffff;strokeColor=#cfd9e8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="130" width="1240" height="710" as="geometry" />
+        </mxCell>
+        <mxCell id="c33" value="F. Department heads and resignation records" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1334" y="148" width="1192" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c34" value="HEADS is separate from department membership; the schema does not make head_emp_id unique." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1334" y="183" width="1192" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c35" value="EMPLOYEE (head)" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="310" width="190" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="c36" value="emp_id" style="ellipse;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#e8f6ee;strokeColor=#3d7756;strokeWidth=2;fontStyle=5;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="238" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c37" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1475" y="278" as="sourcePoint" />
+            <mxPoint x="1475" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c38" value="DEPARTMENT" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="2270" y="310" width="190" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="c39" value="dept_id" style="ellipse;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#e8f6ee;strokeColor=#3d7756;strokeWidth=2;fontStyle=5;" vertex="1" parent="1">
+          <mxGeometry x="2290" y="238" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c40" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2365" y="278" as="sourcePoint" />
+            <mxPoint x="2365" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c41" value="HEADS" style="rhombus;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#fff1d6;strokeColor=#a86a0a;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1825" y="299" width="180" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="c42" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1570" y="337" as="sourcePoint" />
+            <mxPoint x="1825" y="337" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c43" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2005" y="337" as="sourcePoint" />
+            <mxPoint x="2270" y="337" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c44" value="1" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=17;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1625" y="296" width="170" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c45" value="N" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=17;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="2035" y="296" width="190" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c46" value="A department has 0..1 head; one employee can head 0..N departments." style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1610" y="380" width="650" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c47" value="EMPLOYEE" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="625" width="190" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="c48" value="emp_id" style="ellipse;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#e8f6ee;strokeColor=#3d7756;strokeWidth=2;fontStyle=5;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="553" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c49" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1475" y="593" as="sourcePoint" />
+            <mxPoint x="1475" y="625" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c50" value="RESIGNATION" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="2270" y="625" width="190" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="c51" value="resignation_id" style="ellipse;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#e8f6ee;strokeColor=#3d7756;strokeWidth=2;fontStyle=5;" vertex="1" parent="1">
+          <mxGeometry x="2290" y="553" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c52" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2365" y="593" as="sourcePoint" />
+            <mxPoint x="2365" y="625" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c53" value="FILES" style="rhombus;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#fff1d6;strokeColor=#a86a0a;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1825" y="614" width="180" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="c54" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1570" y="652" as="sourcePoint" />
+            <mxPoint x="1825" y="652" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c55" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2005" y="652" as="sourcePoint" />
+            <mxPoint x="2270" y="652" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c56" value="1" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=17;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1625" y="611" width="170" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c57" value="0..1" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=17;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="2035" y="611" width="190" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c58" value="A resignation belongs to one employee; UNIQUE emp_id permits at most one notice." style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1610" y="695" width="650" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c59" value="" style="rounded=1;fillColor=#ffffff;strokeColor=#cfd9e8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="30" y="875" width="1240" height="690" as="geometry" />
+        </mxCell>
+        <mxCell id="c60" value="G. Handover recipient" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="54" y="893" width="1192" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c61" value="The successor is a different role from the departing employee." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="54" y="928" width="1192" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c62" value="EMPLOYEE (successor)" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1110" width="190" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="c63" value="emp_id" style="ellipse;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#e8f6ee;strokeColor=#3d7756;strokeWidth=2;fontStyle=5;" vertex="1" parent="1">
+          <mxGeometry x="120" y="1038" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c64" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="195" y="1078" as="sourcePoint" />
+            <mxPoint x="195" y="1110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c65" value="RESIGNATION" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="990" y="1110" width="190" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="c66" value="resignation_id" style="ellipse;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#e8f6ee;strokeColor=#3d7756;strokeWidth=2;fontStyle=5;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="1038" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c67" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1085" y="1078" as="sourcePoint" />
+            <mxPoint x="1085" y="1110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c68" value="RECEIVES WORK" style="rhombus;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#fff1d6;strokeColor=#a86a0a;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="545" y="1099" width="180" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="c69" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="290" y="1137" as="sourcePoint" />
+            <mxPoint x="545" y="1137" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c70" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="725" y="1137" as="sourcePoint" />
+            <mxPoint x="990" y="1137" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c71" value="1" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=17;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="345" y="1096" width="170" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c72" value="N" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=17;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="755" y="1096" width="190" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c73" value="A resignation may name 0..1 successor; one employee may receive several handovers." style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="330" y="1180" width="650" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c74" value="Procedure and trigger: no self-handover; successor must be active with no own notice." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=18;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1370" width="1140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c75" value="Open tasks transfer immediately. Completed-task ownership and work-log authors stay intact." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=18;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1435" width="1140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c76" value="" style="rounded=1;fillColor=#ffffff;strokeColor=#cfd9e8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="875" width="1240" height="690" as="geometry" />
+        </mxCell>
+        <mxCell id="c77" value="H. PostgreSQL + pgvector snapshots" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1334" y="893" width="1192" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c78" value="Separate database. Dashed link denotes an application-level association via emp_id." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1334" y="928" width="1192" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c79" value="EMPLOYEE" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1380" y="1110" width="190" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="c80" value="emp_id" style="ellipse;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#e8f6ee;strokeColor=#3d7756;strokeWidth=2;fontStyle=5;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="1038" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c81" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1475" y="1078" as="sourcePoint" />
+            <mxPoint x="1475" y="1110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c82" value="ai_work_summaries" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#fbe9ec;strokeColor=#a74358;strokeWidth=2;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="2270" y="1110" width="190" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="c83" value="summary_id" style="ellipse;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=15;fontStyle=1;fillColor=#e8f6ee;strokeColor=#3d7756;strokeWidth=2;fontStyle=5;" vertex="1" parent="1">
+          <mxGeometry x="2290" y="1038" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c84" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#a74358;strokeWidth=2;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2365" y="1078" as="sourcePoint" />
+            <mxPoint x="2365" y="1110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c85" value="HAS SNAPSHOT" style="rhombus;whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#fff1d6;strokeColor=#a86a0a;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1825" y="1099" width="180" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="c86" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#70819a;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1570" y="1137" as="sourcePoint" />
+            <mxPoint x="1825" y="1137" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c87" style="edgeStyle=none;html=0;endArrow=none;strokeColor=#a74358;strokeWidth=2;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2005" y="1137" as="sourcePoint" />
+            <mxPoint x="2270" y="1137" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c88" value="1" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=17;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1625" y="1096" width="170" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c89" value="N" style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=17;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="2035" y="1096" width="190" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c90" value="emp_id and source IDs are logical references: no cross-engine FK is asserted." style="text;html=0;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1610" y="1180" width="650" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c91" value="Snapshot attributes: text, embedding VECTOR(1536), timestamp, method, model," style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=18;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="1360" width="1140" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="c92" value="source fingerprint and JSONB evidence IDs. Complete types/constraints: relational_schema.svg." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=18;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="1415" width="1140" height="45" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

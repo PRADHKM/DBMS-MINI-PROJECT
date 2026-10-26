@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2580" height="1650" viewBox="0 0 2580 1650">
+  <rect x="0" y="0" width="2580" height="1650" fill="#f5f8fc" />
+  <text x="40" y="56.2" fill="#182b49" font-family="Arial, sans-serif" font-size="32" text-anchor="start" font-weight="700">Workload Management System | Chen ER model, details</text>
+  <text x="40" y="93.3" fill="#182b49" font-family="Arial, sans-serif" font-size="18" text-anchor="start">This sheet completes er_diagram_chen.svg. The cross-engine snapshot association is logical, never an enforced foreign key.</text>
+  <rect x="30" y="130" width="1240" height="710" rx="12" fill="white" stroke="#cfd9e8" stroke-width="2" />
+  <text x="54" y="171.7" fill="#182b49" font-family="Arial, sans-serif" font-size="22" text-anchor="start" font-weight="700">E. Skills and line management</text>
+  <text x="54" y="200.9" fill="#526782" font-family="Arial, sans-serif" font-size="14" text-anchor="start">The M:N skill relationship maps to EMPLOYEE_SKILL(emp_id, skill_id, proficiency).</text>
+  <rect x="100" y="310" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="195.0" y="342.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">EMPLOYEE</text>
+  <ellipse cx="195.0" cy="258.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="195.0" y="263.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">emp_id</text>
+  <polyline points="195,278 195,310" fill="none" stroke="#70819a" stroke-width="2" />
+  <rect x="990" y="310" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="1085.0" y="342.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">SKILL</text>
+  <ellipse cx="1085.0" cy="258.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="1085.0" y="263.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">skill_id</text>
+  <polyline points="1085,278 1085,310" fill="none" stroke="#70819a" stroke-width="2" />
+  <polygon points="635.0,299 725,337.0 635.0,375 545,337.0" fill="#fff1d6" stroke="#a86a0a" stroke-width="2" />
+  <text x="635.0" y="342.0" fill="#a86a0a" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">HAS SKILL</text>
+  <polyline points="290,337 545,337" fill="none" stroke="#70819a" stroke-width="2" />
+  <polyline points="725,337 990,337" fill="none" stroke="#70819a" stroke-width="2" />
+  <text x="430.0" y="314.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">M</text>
+  <text x="850.0" y="314.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">N</text>
+  <text x="655.0" y="400.25" fill="#526782" font-family="Arial, sans-serif" font-size="15" text-anchor="middle">Relationship attribute: proficiency. Composite key prevents duplicate employee/skill pairs.</text>
+  <ellipse cx="635.0" cy="215.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="635.0" y="220.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle">proficiency</text>
+  <polyline points="635,299 635,235" fill="none" stroke="#70819a" stroke-width="2" />
+  <rect x="100" y="625" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="195.0" y="657.0" fill="#335786" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle">EMPLOYEE (manager)</text>
+  <ellipse cx="195.0" cy="573.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="195.0" y="578.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">emp_id</text>
+  <polyline points="195,593 195,625" fill="none" stroke="#70819a" stroke-width="2" />
+  <rect x="990" y="625" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="1085.0" y="657.0" fill="#335786" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle">EMPLOYEE (report)</text>
+  <ellipse cx="1085.0" cy="573.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="1085.0" y="578.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">emp_id</text>
+  <polyline points="1085,593 1085,625" fill="none" stroke="#70819a" stroke-width="2" />
+  <polygon points="635.0,614 725,652.0 635.0,690 545,652.0" fill="#fff1d6" stroke="#a86a0a" stroke-width="2" />
+  <text x="635.0" y="657.0" fill="#a86a0a" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">MANAGES</text>
+  <polyline points="290,652 545,652" fill="none" stroke="#70819a" stroke-width="2" />
+  <polyline points="725,652 990,652" fill="none" stroke="#70819a" stroke-width="2" />
+  <text x="430.0" y="629.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">1</text>
+  <text x="850.0" y="629.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">N</text>
+  <text x="655.0" y="715.25" fill="#526782" font-family="Arial, sans-serif" font-size="15" text-anchor="middle">A report has 0..1 manager; a manager has 0..N reports. This is a recursive relationship.</text>
+  <rect x="1310" y="130" width="1240" height="710" rx="12" fill="white" stroke="#cfd9e8" stroke-width="2" />
+  <text x="1334" y="171.7" fill="#182b49" font-family="Arial, sans-serif" font-size="22" text-anchor="start" font-weight="700">F. Department heads and resignation records</text>
+  <text x="1334" y="200.9" fill="#526782" font-family="Arial, sans-serif" font-size="14" text-anchor="start">HEADS is separate from department membership; the schema does not make head_emp_id unique.</text>
+  <rect x="1380" y="310" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="1475.0" y="342.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">EMPLOYEE (head)</text>
+  <ellipse cx="1475.0" cy="258.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="1475.0" y="263.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">emp_id</text>
+  <polyline points="1475,278 1475,310" fill="none" stroke="#70819a" stroke-width="2" />
+  <rect x="2270" y="310" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="2365.0" y="342.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">DEPARTMENT</text>
+  <ellipse cx="2365.0" cy="258.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="2365.0" y="263.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">dept_id</text>
+  <polyline points="2365,278 2365,310" fill="none" stroke="#70819a" stroke-width="2" />
+  <polygon points="1915.0,299 2005,337.0 1915.0,375 1825,337.0" fill="#fff1d6" stroke="#a86a0a" stroke-width="2" />
+  <text x="1915.0" y="342.0" fill="#a86a0a" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">HEADS</text>
+  <polyline points="1570,337 1825,337" fill="none" stroke="#70819a" stroke-width="2" />
+  <polyline points="2005,337 2270,337" fill="none" stroke="#70819a" stroke-width="2" />
+  <text x="1710.0" y="314.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">1</text>
+  <text x="2130.0" y="314.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">N</text>
+  <text x="1935.0" y="400.25" fill="#526782" font-family="Arial, sans-serif" font-size="15" text-anchor="middle">A department has 0..1 head; one employee can head 0..N departments.</text>
+  <rect x="1380" y="625" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="1475.0" y="657.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">EMPLOYEE</text>
+  <ellipse cx="1475.0" cy="573.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="1475.0" y="578.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">emp_id</text>
+  <polyline points="1475,593 1475,625" fill="none" stroke="#70819a" stroke-width="2" />
+  <rect x="2270" y="625" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="2365.0" y="657.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">RESIGNATION</text>
+  <ellipse cx="2365.0" cy="573.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="2365.0" y="578.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">resignation_id</text>
+  <polyline points="2365,593 2365,625" fill="none" stroke="#70819a" stroke-width="2" />
+  <polygon points="1915.0,614 2005,652.0 1915.0,690 1825,652.0" fill="#fff1d6" stroke="#a86a0a" stroke-width="2" />
+  <text x="1915.0" y="657.0" fill="#a86a0a" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">FILES</text>
+  <polyline points="1570,652 1825,652" fill="none" stroke="#70819a" stroke-width="2" />
+  <polyline points="2005,652 2270,652" fill="none" stroke="#70819a" stroke-width="2" />
+  <text x="1710.0" y="629.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">1</text>
+  <text x="2130.0" y="629.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">0..1</text>
+  <text x="1935.0" y="715.25" fill="#526782" font-family="Arial, sans-serif" font-size="15" text-anchor="middle">A resignation belongs to one employee; UNIQUE emp_id permits at most one notice.</text>
+  <rect x="30" y="875" width="1240" height="690" rx="12" fill="white" stroke="#cfd9e8" stroke-width="2" />
+  <text x="54" y="916.7" fill="#182b49" font-family="Arial, sans-serif" font-size="22" text-anchor="start" font-weight="700">G. Handover recipient</text>
+  <text x="54" y="945.9" fill="#526782" font-family="Arial, sans-serif" font-size="14" text-anchor="start">The successor is a different role from the departing employee.</text>
+  <rect x="100" y="1110" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="195.0" y="1142.0" fill="#335786" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle">EMPLOYEE (successor)</text>
+  <ellipse cx="195.0" cy="1058.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="195.0" y="1063.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">emp_id</text>
+  <polyline points="195,1078 195,1110" fill="none" stroke="#70819a" stroke-width="2" />
+  <rect x="990" y="1110" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="1085.0" y="1142.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">RESIGNATION</text>
+  <ellipse cx="1085.0" cy="1058.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="1085.0" y="1063.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">resignation_id</text>
+  <polyline points="1085,1078 1085,1110" fill="none" stroke="#70819a" stroke-width="2" />
+  <polygon points="635.0,1099 725,1137.0 635.0,1175 545,1137.0" fill="#fff1d6" stroke="#a86a0a" stroke-width="2" />
+  <text x="635.0" y="1142.0" fill="#a86a0a" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">RECEIVES WORK</text>
+  <polyline points="290,1137 545,1137" fill="none" stroke="#70819a" stroke-width="2" />
+  <polyline points="725,1137 990,1137" fill="none" stroke="#70819a" stroke-width="2" />
+  <text x="430.0" y="1114.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">1</text>
+  <text x="850.0" y="1114.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">N</text>
+  <text x="655.0" y="1200.25" fill="#526782" font-family="Arial, sans-serif" font-size="15" text-anchor="middle">A resignation may name 0..1 successor; one employee may receive several handovers.</text>
+  <text x="80" y="1401.3" fill="#182b49" font-family="Arial, sans-serif" font-size="18" text-anchor="start">Procedure and trigger: no self-handover; successor must be active with no own notice.</text>
+  <text x="80" y="1466.3" fill="#182b49" font-family="Arial, sans-serif" font-size="18" text-anchor="start">Open tasks transfer immediately. Completed-task ownership and work-log authors stay intact.</text>
+  <rect x="1310" y="875" width="1240" height="690" rx="12" fill="white" stroke="#cfd9e8" stroke-width="2" />
+  <text x="1334" y="916.7" fill="#182b49" font-family="Arial, sans-serif" font-size="22" text-anchor="start" font-weight="700">H. PostgreSQL + pgvector snapshots</text>
+  <text x="1334" y="945.9" fill="#526782" font-family="Arial, sans-serif" font-size="14" text-anchor="start">Separate database. Dashed link denotes an application-level association via emp_id.</text>
+  <rect x="1380" y="1110" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="1475.0" y="1142.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">EMPLOYEE</text>
+  <ellipse cx="1475.0" cy="1058.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="1475.0" y="1063.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">emp_id</text>
+  <polyline points="1475,1078 1475,1110" fill="none" stroke="#70819a" stroke-width="2" />
+  <rect x="2270" y="1110" width="190" height="54" rx="4" fill="#fbe9ec" stroke="#a74358" stroke-width="2" stroke-dasharray="7 4" />
+  <text x="2365.0" y="1142.0" fill="#a74358" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle">ai_work_summaries</text>
+  <ellipse cx="2365.0" cy="1058.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="2365.0" y="1063.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">summary_id</text>
+  <polyline points="2365,1078 2365,1110" fill="none" stroke="#a74358" stroke-width="2" stroke-dasharray="7 4" />
+  <polygon points="1915.0,1099 2005,1137.0 1915.0,1175 1825,1137.0" fill="#fff1d6" stroke="#a86a0a" stroke-width="2" />
+  <text x="1915.0" y="1142.0" fill="#a86a0a" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">HAS SNAPSHOT</text>
+  <polyline points="1570,1137 1825,1137" fill="none" stroke="#70819a" stroke-width="2" />
+  <polyline points="2005,1137 2270,1137" fill="none" stroke="#a74358" stroke-width="2" stroke-dasharray="7 4" />
+  <text x="1710.0" y="1114.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">1</text>
+  <text x="2130.0" y="1114.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">N</text>
+  <text x="1935.0" y="1200.25" fill="#526782" font-family="Arial, sans-serif" font-size="15" text-anchor="middle">emp_id and source IDs are logical references: no cross-engine FK is asserted.</text>
+  <text x="1360" y="1388.8" fill="#182b49" font-family="Arial, sans-serif" font-size="18" text-anchor="start">Snapshot attributes: text, embedding VECTOR(1536), timestamp, method, model,</text>
+  <text x="1360" y="1443.8" fill="#182b49" font-family="Arial, sans-serif" font-size="18" text-anchor="start">source fingerprint and JSONB evidence IDs. Complete types/constraints: relational_schema.svg.</text>
+</svg>
