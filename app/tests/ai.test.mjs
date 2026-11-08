@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { generateSummary, createEmbedding, vectorLiteral, fingerprintContext } from '../lib/ai.mjs';
+import { generateSummary, createEmbedding, vectorLiteral, fingerprintContext, localEmbedding, embeddingModel, embeddingProvider, LOCAL_EMBEDDING_MODEL } from '../lib/ai.mjs';
 
 const context = {
   employee: { emp_id: 1, name: 'Asha', designation: 'Engineer' },
@@ -45,7 +45,6 @@ test('embeddings enforce schema dimensions and reject invalid or zero vectors', 
   for (const invalid of [[], Array(1536).fill(0), Array(1536).fill(NaN), Array(1536).fill('1')]) {
     assert.throws(() => vectorLiteral(invalid), /invalid/);
   }
-  await assert.rejects(createEmbedding('x', { env: {} }), /needs OPENAI_API_KEY/);
 });
 test('editing source notes invalidates a cached summary fingerprint', () => {
   const changed = structuredClone(context);
@@ -85,4 +84,29 @@ test('bounded provider evidence prioritizes old critical open tasks and disclose
   assert.equal(summary.sourceTaskIds.length, 100);
   assert.equal(summary.sourceLogIds[0], 2);
   assert.equal(summary.sourceLogIds.length, 200);
+});
+
+test('local offline embedding is deterministic, normalised, schema-sized and lexically ranked', async () => {
+  const a = localEmbedding('Built the payment gateway integration for card payments');
+  assert.equal(a.length, 1536);
+  assert.deepEqual(a, localEmbedding('Built the payment gateway integration for card payments'));
+  assert.ok(Math.abs(Math.hypot(...a) - 1) < 1e-9);
+  assert.doesNotThrow(() => vectorLiteral(a));
+  const cosine = (x, y) => x.reduce((sum, n, i) => sum + n * y[i], 0);
+  const related = localEmbedding('Payment gateway work and card payment testing');
+  const unrelated = localEmbedding('Kubernetes cluster migration and network policies');
+  assert.ok(cosine(a, related) > 0.4, 'shared vocabulary scores high');
+  assert.ok(cosine(a, related) > cosine(a, unrelated) + 0.3, 'related text outranks unrelated text');
+  assert.throws(() => localEmbedding('!!! ??? the of'), /searchable words/);
+});
+test('provider selection: local without a key or when forced, provider only with a key', async () => {
+  assert.equal(embeddingProvider({}), 'local');
+  assert.equal(embeddingModel({}), LOCAL_EMBEDDING_MODEL);
+  assert.equal(embeddingProvider({ OPENAI_API_KEY: 'your_real_key' }), 'local', 'placeholder keys are not real keys');
+  assert.equal(embeddingProvider({ OPENAI_API_KEY: 'k' }), 'provider');
+  assert.equal(embeddingModel({ OPENAI_API_KEY: 'k' }), 'text-embedding-3-small');
+  assert.equal(embeddingProvider({ OPENAI_API_KEY: 'k', EMBEDDING_PROVIDER: 'local' }), 'local');
+  const vector = await createEmbedding('access checks', { env: {}, fetchImpl: () => assert.fail('Local mode must not call a provider') });
+  assert.equal(vector.length, 1536);
+  await assert.rejects(createEmbedding('   ', { env: {} }), /1 to 16000/);
 });

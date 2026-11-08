@@ -48,3 +48,37 @@ export async function searchSimilarSummaries(queryEmbedding, limit = 5, pool = g
   );
   return rows;
 }
+
+const SUMMARY_COLUMNS = `summary_id, emp_id, summary_text, source_context, generated_on, generation_method,
+  source_fingerprint, embedding_model, source_log_ids, source_task_ids, (embedding IS NOT NULL) AS has_embedding`;
+
+// READ: one snapshot by primary key (the embedding itself is never sent to clients).
+export async function getSummary(summaryId, pool = getPgPool()) {
+  const { rows } = await pool.query(`SELECT ${SUMMARY_COLUMNS} FROM ai_work_summaries WHERE summary_id=$1`, [summaryId]);
+  return rows[0] || null;
+}
+
+// READ: snapshot history for one employee, newest first.
+export async function listSummaries(empId, limit = 20, pool = getPgPool()) {
+  const { rows } = await pool.query(
+    `SELECT ${SUMMARY_COLUMNS} FROM ai_work_summaries WHERE emp_id=$1
+     ORDER BY generated_on DESC, summary_id DESC LIMIT $2`, [empId, limit]);
+  return rows;
+}
+
+// UPDATE: replace text and its embedding together so text and vector never drift apart.
+// generated_on and source metadata are kept; generation_method becomes 'edited'.
+export async function updateSummary(summaryId, { summaryText, embedding }, pool = getPgPool()) {
+  const { rows } = await pool.query(
+    `UPDATE ai_work_summaries
+     SET summary_text=$2, embedding=$3::vector, embedding_model=$4, generation_method='edited'
+     WHERE summary_id=$1 RETURNING ${SUMMARY_COLUMNS}`,
+    [summaryId, summaryText, embedding ? vectorLiteral(embedding) : null, embedding ? embeddingModel() : null]);
+  return rows[0] || null;
+}
+
+// DELETE: remove one snapshot and its vector; returns true if a row was removed.
+export async function deleteSummary(summaryId, pool = getPgPool()) {
+  const { rowCount } = await pool.query('DELETE FROM ai_work_summaries WHERE summary_id=$1', [summaryId]);
+  return rowCount === 1;
+}

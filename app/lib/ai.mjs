@@ -3,11 +3,50 @@ import { HttpError } from './domain.mjs';
 
 export const VECTOR_DIMENSIONS = 1536;
 const configured = (value) => value && !/^(your_|change_me|replace_)/i.test(value);
-export function embeddingModel(env = process.env) {
-  return env.EMBEDDING_MODEL || 'text-embedding-3-small';
-}
+export const LOCAL_EMBEDDING_MODEL = 'local-hash-v1';
 export function hasEmbeddingKey(env = process.env) {
   return Boolean(configured(env.EMBEDDING_API_KEY) || configured(env.OPENAI_API_KEY));
+}
+// 'provider' = OpenAI embeddings; 'local' = built-in offline hashing embedding.
+// Local is the default without a key, so vector storage/search works offline.
+export function embeddingProvider(env = process.env) {
+  return hasEmbeddingKey(env) && env.EMBEDDING_PROVIDER !== 'local' ? 'provider' : 'local';
+}
+export function embeddingModel(env = process.env) {
+  return embeddingProvider(env) === 'local' ? LOCAL_EMBEDDING_MODEL
+    : (env.EMBEDDING_MODEL || 'text-embedding-3-small');
+}
+
+// Offline embedding: signed feature hashing of stemmed unigrams and bigrams into
+// 1536 dimensions, L2-normalised. It captures shared vocabulary (lexical
+// similarity), NOT neural semantics; use a provider key for true semantic search.
+const STOPWORDS = new Set(('a an and are as at be been but by for from had has have in into is it its of on or that the ' +
+  'their this to was were will with who what which when where how did does do about work worked working').split(' '));
+function stem(word) {
+  for (const suffix of ['ations', 'ation', 'ing', 'ers', 'er', 'ed', 'es', 's', 'ly']) {
+    if (word.length > suffix.length + 3 && word.endsWith(suffix)) return word.slice(0, -suffix.length);
+  }
+  return word;
+}
+function fnv1a(value) {
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < value.length; i++) { hash ^= value.charCodeAt(i); hash = Math.imul(hash, 0x01000193) >>> 0; }
+  return hash >>> 0;
+}
+export function localEmbedding(input) {
+  const tokens = (String(input).toLowerCase().normalize('NFKD').match(/[a-z0-9]+/g) || [])
+    .filter((word) => !STOPWORDS.has(word)).map(stem);
+  const counts = new Map();
+  const add = (feature, weight) => counts.set(feature, (counts.get(feature) || 0) + weight);
+  tokens.forEach((token, i) => { add(token, 1); if (i) add(`${tokens[i - 1]} ${token}`, 0.5); });
+  const vector = Array(VECTOR_DIMENSIONS).fill(0);
+  for (const [feature, weight] of counts) {
+    const hash = fnv1a(feature);
+    vector[hash % VECTOR_DIMENSIONS] += ((hash >>> 16) & 1 ? 1 : -1) * (1 + Math.log(weight));
+  }
+  const norm = Math.sqrt(vector.reduce((sum, n) => sum + n * n, 0));
+  if (!norm) throw new HttpError(400, 'Text must contain searchable words (letters or numbers).');
+  return vector.map((n) => n / norm);
 }
 export function vectorLiteral(values) {
   if (!Array.isArray(values) || values.length !== VECTOR_DIMENSIONS ||
@@ -42,12 +81,11 @@ async function providerRequest(path, body, key, fetchImpl) {
 }
 
 export async function createEmbedding(input, { env = process.env, fetchImpl = fetch } = {}) {
-  const key = configured(env.EMBEDDING_API_KEY) ? env.EMBEDDING_API_KEY : env.OPENAI_API_KEY;
-  if (!configured(key)) throw new HttpError(503,
-    'Semantic search needs OPENAI_API_KEY (or EMBEDDING_API_KEY) on the server. Generate summaries after configuring it.');
   if (typeof input !== 'string' || !input.trim() || input.length > 16000) {
     throw new HttpError(400, 'Embedding text must contain 1 to 16000 characters; regenerate a shorter summary.');
   }
+  if (embeddingProvider(env) === 'local') return localEmbedding(input);
+  const key = configured(env.EMBEDDING_API_KEY) ? env.EMBEDDING_API_KEY : env.OPENAI_API_KEY;
   const data = await providerRequest('embeddings', {
     model: embeddingModel(env), input,
     encoding_format: 'float', dimensions: VECTOR_DIMENSIONS,

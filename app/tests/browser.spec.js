@@ -200,3 +200,53 @@ test('editing historical assignees, managers and department heads preserves thei
   }
   expect(errors).toEqual([]);
 });
+
+test('admin can search, edit (re-embed) and delete vector summaries from the UI', async ({ page }) => {
+  const errors = observeErrors(page);
+  const word = 'zebraquartz' + Date.now().toString(36);
+  page.on('dialog', dialog => dialog.accept());
+  await login(page, process.env.WMS_TEST_ADMIN || 'ravi.shankar');
+  await page.goto('/employees/2');
+  await page.getByRole('button', { name: /^(Generate|Regenerate) summary$/ }).click();
+  await expect(page.getByRole('button', { name: /^(Generate|Regenerate) summary$/ })).toBeEnabled({ timeout: 30000 });
+  const history = page.locator('#summary-history');
+  await expect(history.getByRole('heading', { name: 'Saved summary snapshots' })).toBeVisible();
+  await expect(history.locator('tbody tr').first()).toContainText(/local-hash-v1|text-embedding/);
+
+  // SEARCH finds the freshly embedded summary.
+  await page.goto('/dashboard');
+  await page.getByLabel('Search team knowledge').fill('Ananya Rao senior backend engineer');
+  await page.getByRole('button', { name: 'Search knowledge' }).click();
+  await expect(page.locator('.search-results article').first()).toContainText('Ananya Rao');
+
+  // UPDATE: edit text, which re-embeds; the new unique word becomes searchable.
+  await page.goto('/employees/2');
+  await history.locator('tbody tr').first().getByRole('button', { name: 'Edit' }).click();
+  await page.getByLabel('Edit summary text').fill(`Ananya Rao led the ${word} rollout.`);
+  await page.getByRole('button', { name: 'Save and re-embed' }).click();
+  await expect(page.getByText('Summary updated and re-embedded.')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Edited work summary' })).toBeVisible();
+  await page.goto('/dashboard');
+  await page.getByLabel('Search team knowledge').fill(`${word} rollout`);
+  await page.getByRole('button', { name: 'Search knowledge' }).click();
+  await expect(page.locator('.search-results article').first()).toContainText(word);
+
+  // DELETE removes the vector, so the unique word is no longer found.
+  await page.goto('/employees/2');
+  await history.locator('tbody tr').first().getByRole('button', { name: 'Delete' }).click();
+  await expect(page.getByText('Summary snapshot deleted.')).toBeVisible();
+  await page.goto('/dashboard');
+  await page.getByLabel('Search team knowledge').fill(`${word} rollout`);
+  await page.getByRole('button', { name: 'Search knowledge' }).click();
+  await expect(page.locator('.search-results')).not.toContainText(word);
+  expect(errors).toEqual([]);
+});
+
+test('employee sees own snapshots read-only and no search panel', async ({ page }) => {
+  await login(page, 'ananya.rao');
+  await page.goto('/employees/2');
+  await expect(page.locator('#summary-history')).toBeVisible();
+  await expect(page.locator('#summary-history').getByRole('button', { name: /^(Edit|Delete)$/ })).toHaveCount(0);
+  await page.goto('/dashboard');
+  await expect(page.getByLabel('Search team knowledge')).toHaveCount(0);
+});
