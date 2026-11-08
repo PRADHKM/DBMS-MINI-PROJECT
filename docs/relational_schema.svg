@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2460" height="1740" viewBox="0 0 2460 1740">
+  <rect x="0" y="0" width="2460" height="1740" fill="#f5f8fc" />
+  <text x="35" y="53.5" fill="#182b49" font-family="Arial, sans-serif" font-size="30" text-anchor="start" font-weight="700">Workload Management System | physical schema</text>
+  <text x="35" y="91.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="start">PK = primary key; UQ = unique; NN = NOT NULL; FK targets are explicit. Nullable fields participate optionally.</text>
+  <rect x="20" y="120" width="1560" height="1545" rx="12" fill="white" stroke="#cfd9e8" stroke-width="2" />
+  <text x="44" y="161.7" fill="#182b49" font-family="Arial, sans-serif" font-size="22" text-anchor="start" font-weight="700">MySQL | normalized operational database</text>
+  <text x="44" y="190.9" fill="#526782" font-family="Arial, sans-serif" font-size="14" text-anchor="start">Nine tables; ENUM domains, keys and data checks match database/mysql/01_schema.sql.</text>
+  <rect x="45" y="240" width="480" height="46" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="285.0" y="268.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">DEPARTMENT</text>
+  <rect x="45" y="286" width="480" height="107" fill="white" stroke="#bdcce0" />
+  <text x="57" y="310.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">dept_id INT [PK, AUTO_INCREMENT]</text>
+  <text x="57" y="341.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">dept_name VARCHAR(100) [NN, UQ]</text>
+  <text x="57" y="372.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">head_emp_id INT [FK → EMPLOYEE.emp_id; nullable]</text>
+  <rect x="555" y="240" width="480" height="46" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="795.0" y="268.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">EMPLOYEE</text>
+  <rect x="555" y="286" width="480" height="293" fill="white" stroke="#bdcce0" />
+  <text x="567" y="310.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">emp_id INT [PK, AUTO_INCREMENT]</text>
+  <text x="567" y="341.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">name VARCHAR(100) [NN]</text>
+  <text x="567" y="372.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">email VARCHAR(100) [NN, UQ]</text>
+  <text x="567" y="403.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">phone VARCHAR(15) [nullable]</text>
+  <text x="567" y="434.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">designation VARCHAR(100) [nullable]</text>
+  <text x="567" y="465.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">dept_id INT [FK → DEPARTMENT.dept_id; nullable]</text>
+  <text x="567" y="496.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">manager_id INT [FK → EMPLOYEE.emp_id; nullable]</text>
+  <text x="567" y="527.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">date_of_joining DATE [NN]</text>
+  <text x="567" y="558.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">status ENUM(active,resigned) [NN; default active]</text>
+  <rect x="1065" y="240" width="480" height="46" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="1305.0" y="268.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">USER_ACCOUNT</text>
+  <rect x="1065" y="286" width="480" height="200" fill="white" stroke="#bdcce0" />
+  <text x="1077" y="310.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">user_id INT [PK, AUTO_INCREMENT]</text>
+  <text x="1077" y="341.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">emp_id INT [NN, UQ; FK → EMPLOYEE.emp_id]</text>
+  <text x="1077" y="372.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">username VARCHAR(50) [NN, UQ]</text>
+  <text x="1077" y="403.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">password_hash VARCHAR(255) [NN; bcrypt]</text>
+  <text x="1077" y="434.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">role ENUM(admin,employee) [NN; default employee]</text>
+  <text x="1077" y="465.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">created_at DATETIME [NN; default CURRENT_TIMESTAMP]</text>
+  <rect x="45" y="700" width="480" height="46" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="285.0" y="728.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">SKILL</text>
+  <rect x="45" y="746" width="480" height="76" fill="white" stroke="#bdcce0" />
+  <text x="57" y="770.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">skill_id INT [PK, AUTO_INCREMENT]</text>
+  <text x="57" y="801.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">skill_name VARCHAR(100) [NN, UQ]</text>
+  <rect x="555" y="700" width="480" height="46" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="795.0" y="728.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">EMPLOYEE_SKILL</text>
+  <rect x="555" y="746" width="480" height="138" fill="white" stroke="#bdcce0" />
+  <text x="567" y="770.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">emp_id INT [PK(1), NN; FK → EMPLOYEE.emp_id]</text>
+  <text x="567" y="801.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">skill_id INT [PK(2), NN; FK → SKILL.skill_id]</text>
+  <text x="567" y="832.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">proficiency ENUM(beginner,intermediate,advanced,expert)</text>
+  <text x="567" y="863.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">  [nullable; default intermediate]</text>
+  <rect x="1065" y="700" width="480" height="46" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="1305.0" y="728.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">PROJECT</text>
+  <rect x="1065" y="746" width="480" height="293" fill="white" stroke="#bdcce0" />
+  <text x="1077" y="770.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">project_id INT [PK, AUTO_INCREMENT]</text>
+  <text x="1077" y="801.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">project_name VARCHAR(150) [NN]</text>
+  <text x="1077" y="832.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">description TEXT [nullable]</text>
+  <text x="1077" y="863.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">start_date DATE [nullable]</text>
+  <text x="1077" y="894.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">end_date DATE [nullable]</text>
+  <text x="1077" y="925.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">status ENUM(planned,ongoing,completed,on_hold)</text>
+  <text x="1077" y="956.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">  [NN; default planned]</text>
+  <text x="1077" y="987.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">dept_id INT [FK → DEPARTMENT.dept_id; nullable]</text>
+  <text x="1077" y="1018.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">CHECK: end_date ≥ start_date when both exist</text>
+  <rect x="45" y="1160" width="480" height="46" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="285.0" y="1188.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">TASK</text>
+  <rect x="45" y="1206" width="480" height="324" fill="white" stroke="#bdcce0" />
+  <text x="57" y="1230.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">task_id INT [PK, AUTO_INCREMENT]</text>
+  <text x="57" y="1261.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">project_id INT [NN; FK → PROJECT.project_id]</text>
+  <text x="57" y="1292.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">assigned_to INT [FK → EMPLOYEE.emp_id; nullable]</text>
+  <text x="57" y="1323.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">title VARCHAR(150) [NN]</text>
+  <text x="57" y="1354.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">description TEXT [nullable]</text>
+  <text x="57" y="1385.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">priority ENUM(low,medium,high,critical) [NN; default medium]</text>
+  <text x="57" y="1416.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">status ENUM(not_started,in_progress,completed,blocked)</text>
+  <text x="57" y="1447.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">  [NN; default not_started]</text>
+  <text x="57" y="1478.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">start_date, due_date, completion_date DATE [nullable]</text>
+  <text x="57" y="1509.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">CHECK: due_date ≥ start_date when both exist</text>
+  <rect x="555" y="1160" width="480" height="46" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="795.0" y="1188.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">WORK_LOG</text>
+  <rect x="555" y="1206" width="480" height="200" fill="white" stroke="#bdcce0" />
+  <text x="567" y="1230.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">log_id INT [PK, AUTO_INCREMENT]</text>
+  <text x="567" y="1261.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">task_id INT [NN; FK → TASK.task_id]</text>
+  <text x="567" y="1292.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">emp_id INT [NN; FK → EMPLOYEE.emp_id]</text>
+  <text x="567" y="1323.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">log_date DATE [NN]</text>
+  <text x="567" y="1354.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">hours_spent DECIMAL(4,2) [NN; CHECK 0 &lt; hours ≤ 24]</text>
+  <text x="567" y="1385.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">notes TEXT [nullable]</text>
+  <rect x="1065" y="1160" width="480" height="46" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="1305.0" y="1188.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">RESIGNATION</text>
+  <rect x="1065" y="1206" width="480" height="231" fill="white" stroke="#bdcce0" />
+  <text x="1077" y="1230.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">resignation_id INT [PK, AUTO_INCREMENT]</text>
+  <text x="1077" y="1261.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">emp_id INT [NN, UQ; FK → EMPLOYEE.emp_id]</text>
+  <text x="1077" y="1292.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">resignation_date DATE [NN]</text>
+  <text x="1077" y="1323.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">last_working_day DATE [NN]</text>
+  <text x="1077" y="1354.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">handover_notes TEXT [nullable]</text>
+  <text x="1077" y="1385.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">handover_to INT [FK → EMPLOYEE.emp_id; nullable]</text>
+  <text x="1077" y="1416.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">CHECK: last_working_day ≥ resignation_date</text>
+  <rect x="1610" y="120" width="825" height="1545" rx="12" fill="white" stroke="#cfd9e8" stroke-width="2" />
+  <text x="1634" y="161.7" fill="#182b49" font-family="Arial, sans-serif" font-size="22" text-anchor="start" font-weight="700">PostgreSQL 16 + pgvector | separate database</text>
+  <text x="1634" y="190.9" fill="#526782" font-family="Arial, sans-serif" font-size="14" text-anchor="start">Application joins use emp_id. There is NO cross-engine foreign key.</text>
+  <rect x="1640" y="245" width="765" height="46" rx="4" fill="#fbe9ec" stroke="#a74358" stroke-width="2" stroke-dasharray="7 4" />
+  <text x="2022.5" y="273.0" fill="#a74358" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">ai_work_summaries</text>
+  <rect x="1640" y="291" width="765" height="417" fill="white" stroke="#bdcce0" />
+  <text x="1652" y="315.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">summary_id SERIAL [PK]</text>
+  <text x="1652" y="346.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">emp_id INTEGER [NN; logical employee reference]</text>
+  <text x="1652" y="377.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">generated_on TIMESTAMPTZ [NN; default NOW()]</text>
+  <text x="1652" y="408.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">summary_text TEXT [NN]</text>
+  <text x="1652" y="439.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">source_context VARCHAR(255) [nullable]</text>
+  <text x="1652" y="470.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">generation_method VARCHAR(20) [NN; default provider]</text>
+  <text x="1652" y="501.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">source_fingerprint CHAR(64) [nullable]</text>
+  <text x="1652" y="532.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">embedding_model VARCHAR(120) [nullable]</text>
+  <text x="1652" y="563.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">source_log_ids JSONB [NN; default []]</text>
+  <text x="1652" y="594.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">source_task_ids JSONB [NN; default []]</text>
+  <text x="1652" y="625.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">embedding VECTOR(1536) [nullable for record-only summary]</text>
+  <text x="1652" y="656.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">HNSW (embedding vector_cosine_ops)</text>
+  <text x="1652" y="687.875" fill="#263f60" font-family="Arial, sans-serif" font-size="12.5" text-anchor="start">INDEX (emp_id); INDEX (emp_id, generated_on DESC, summary_id DESC)</text>
+  <text x="1640" y="777.35" fill="#182b49" font-family="Arial, sans-serif" font-size="21" text-anchor="start" font-weight="700">MySQL foreign-key behavior and cardinalities</text>
+  <text x="1640" y="825.9" fill="#182b49" font-family="Arial, sans-serif" font-size="14" text-anchor="start">DEPARTMENT.head_emp_id → EMPLOYEE  (N:1; optional head)</text>
+  <text x="1640" y="862.9" fill="#182b49" font-family="Arial, sans-serif" font-size="14" text-anchor="start">EMPLOYEE.dept_id → DEPARTMENT  (N:1; optional)</text>
+  <text x="1640" y="899.9" fill="#182b49" font-family="Arial, sans-serif" font-size="14" text-anchor="start">EMPLOYEE.manager_id → EMPLOYEE  (N:1; optional manager)</text>
+  <text x="1640" y="936.9" fill="#182b49" font-family="Arial, sans-serif" font-size="14" text-anchor="start">USER_ACCOUNT.emp_id → EMPLOYEE  (0..1 account : 1 employee)</text>
+  <text x="1640" y="973.9" fill="#182b49" font-family="Arial, sans-serif" font-size="14" text-anchor="start">EMPLOYEE_SKILL.emp_id → EMPLOYEE  (N:1)</text>
+  <text x="1640" y="1010.9" fill="#182b49" font-family="Arial, sans-serif" font-size="14" text-anchor="start">EMPLOYEE_SKILL.skill_id → SKILL  (N:1)</text>
+  <text x="1640" y="1047.9" fill="#182b49" font-family="Arial, sans-serif" font-size="14" text-anchor="start">PROJECT.dept_id → DEPARTMENT  (N:1; optional)</text>
+  <text x="1640" y="1084.9" fill="#182b49" font-family="Arial, sans-serif" font-size="14" text-anchor="start">TASK.project_id → PROJECT  (N:1; mandatory)</text>
+  <text x="1640" y="1121.9" fill="#182b49" font-family="Arial, sans-serif" font-size="14" text-anchor="start">TASK.assigned_to → EMPLOYEE  (N:1; optional)</text>
+  <text x="1640" y="1158.9" fill="#182b49" font-family="Arial, sans-serif" font-size="14" text-anchor="start">WORK_LOG.task_id → TASK  (N:1; mandatory)</text>
+  <text x="1640" y="1195.9" fill="#182b49" font-family="Arial, sans-serif" font-size="14" text-anchor="start">WORK_LOG.emp_id → EMPLOYEE  (N:1; mandatory)</text>
+  <text x="1640" y="1232.9" fill="#182b49" font-family="Arial, sans-serif" font-size="14" text-anchor="start">RESIGNATION.emp_id → EMPLOYEE  (0..1 notice : 1 employee)</text>
+  <text x="1640" y="1269.9" fill="#182b49" font-family="Arial, sans-serif" font-size="14" text-anchor="start">RESIGNATION.handover_to → EMPLOYEE  (N:1; optional)</text>
+  <text x="1640" y="1370.9" fill="#526782" font-family="Arial, sans-serif" font-size="14" text-anchor="start">All FK updates cascade. Nullable FKs use ON DELETE SET NULL.</text>
+  <text x="1640" y="1418.9" fill="#526782" font-family="Arial, sans-serif" font-size="14" text-anchor="start">Other FKs use ON DELETE CASCADE. The API blocks history-erasing deletes.</text>
+  <text x="1640" y="1466.9" fill="#526782" font-family="Arial, sans-serif" font-size="14" text-anchor="start">Triggers/procedure add ownership, completion, date and handover rules.</text>
+  <text x="1640" y="1514.9" fill="#526782" font-family="Arial, sans-serif" font-size="14" text-anchor="start">v_employee_effective_status computes expiry after the last working day.</text>
+  <text x="1640" y="1562.9" fill="#526782" font-family="Arial, sans-serif" font-size="14" text-anchor="start">Vector source IDs are logical evidence references; never DB-enforced FKs.</text>
+</svg>

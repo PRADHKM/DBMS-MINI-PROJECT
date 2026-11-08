@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2580" height="1700" viewBox="0 0 2580 1700">
+  <rect x="0" y="0" width="2580" height="1700" fill="#f5f8fc" />
+  <text x="40" y="56.2" fill="#182b49" font-family="Arial, sans-serif" font-size="32" text-anchor="start" font-weight="700">Workload Management System | Chen ER model</text>
+  <text x="40" y="93.3" fill="#182b49" font-family="Arial, sans-serif" font-size="18" text-anchor="start">Repeated entity names refer to the same entity. Underlined ovals are keys. Optional participation is stated beside each relationship.</text>
+  <rect x="30" y="130" width="1240" height="720" rx="12" fill="white" stroke="#cfd9e8" stroke-width="2" />
+  <text x="54" y="171.7" fill="#182b49" font-family="Arial, sans-serif" font-size="22" text-anchor="start" font-weight="700">A. Organization and authentication</text>
+  <text x="54" y="200.9" fill="#526782" font-family="Arial, sans-serif" font-size="14" text-anchor="start">MySQL operational entities; accounts are optional for an employee.</text>
+  <rect x="100" y="320" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="195.0" y="352.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">DEPARTMENT</text>
+  <ellipse cx="195.0" cy="268.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="195.0" y="273.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">dept_id</text>
+  <polyline points="195,288 195,320" fill="none" stroke="#70819a" stroke-width="2" />
+  <rect x="990" y="320" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="1085.0" y="352.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">EMPLOYEE</text>
+  <ellipse cx="1085.0" cy="268.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="1085.0" y="273.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">emp_id</text>
+  <polyline points="1085,288 1085,320" fill="none" stroke="#70819a" stroke-width="2" />
+  <polygon points="635.0,309 725,347.0 635.0,385 545,347.0" fill="#fff1d6" stroke="#a86a0a" stroke-width="2" />
+  <text x="635.0" y="352.0" fill="#a86a0a" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">EMPLOYS</text>
+  <polyline points="290,347 545,347" fill="none" stroke="#70819a" stroke-width="2" />
+  <polyline points="725,347 990,347" fill="none" stroke="#70819a" stroke-width="2" />
+  <text x="430.0" y="324.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">1</text>
+  <text x="850.0" y="324.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">N</text>
+  <text x="655.0" y="410.25" fill="#526782" font-family="Arial, sans-serif" font-size="15" text-anchor="middle">An employee may belong to 0..1 department; a department has 0..N employees.</text>
+  <rect x="100" y="610" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="195.0" y="642.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">EMPLOYEE</text>
+  <ellipse cx="195.0" cy="558.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="195.0" y="563.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">emp_id</text>
+  <polyline points="195,578 195,610" fill="none" stroke="#70819a" stroke-width="2" />
+  <rect x="990" y="610" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="1085.0" y="642.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">USER_ACCOUNT</text>
+  <ellipse cx="1085.0" cy="558.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="1085.0" y="563.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">user_id</text>
+  <polyline points="1085,578 1085,610" fill="none" stroke="#70819a" stroke-width="2" />
+  <polygon points="635.0,599 725,637.0 635.0,675 545,637.0" fill="#fff1d6" stroke="#a86a0a" stroke-width="2" />
+  <text x="635.0" y="642.0" fill="#a86a0a" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">HAS ACCOUNT</text>
+  <polyline points="290,637 545,637" fill="none" stroke="#70819a" stroke-width="2" />
+  <polyline points="725,637 990,637" fill="none" stroke="#70819a" stroke-width="2" />
+  <text x="430.0" y="614.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">1</text>
+  <text x="850.0" y="614.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">0..1</text>
+  <text x="655.0" y="700.25" fill="#526782" font-family="Arial, sans-serif" font-size="15" text-anchor="middle">Every account belongs to exactly one employee (UNIQUE emp_id).</text>
+  <rect x="1310" y="130" width="1240" height="720" rx="12" fill="white" stroke="#cfd9e8" stroke-width="2" />
+  <text x="1334" y="171.7" fill="#182b49" font-family="Arial, sans-serif" font-size="22" text-anchor="start" font-weight="700">B. Work and contribution history</text>
+  <text x="1334" y="200.9" fill="#526782" font-family="Arial, sans-serif" font-size="14" text-anchor="start">WORK_LOG stores the original author, even after task reassignment.</text>
+  <rect x="1380" y="310" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="1475.0" y="342.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">PROJECT</text>
+  <ellipse cx="1475.0" cy="258.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="1475.0" y="263.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">project_id</text>
+  <polyline points="1475,278 1475,310" fill="none" stroke="#70819a" stroke-width="2" />
+  <rect x="2270" y="310" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="2365.0" y="342.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">TASK</text>
+  <ellipse cx="2365.0" cy="258.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="2365.0" y="263.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">task_id</text>
+  <polyline points="2365,278 2365,310" fill="none" stroke="#70819a" stroke-width="2" />
+  <polygon points="1915.0,299 2005,337.0 1915.0,375 1825,337.0" fill="#fff1d6" stroke="#a86a0a" stroke-width="2" />
+  <text x="1915.0" y="342.0" fill="#a86a0a" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">CONTAINS</text>
+  <polyline points="1570,337 1825,337" fill="none" stroke="#70819a" stroke-width="2" />
+  <polyline points="2005,337 2270,337" fill="none" stroke="#70819a" stroke-width="2" />
+  <text x="1710.0" y="314.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">1</text>
+  <text x="2130.0" y="314.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">N</text>
+  <text x="1935.0" y="400.25" fill="#526782" font-family="Arial, sans-serif" font-size="15" text-anchor="middle">Every task belongs to one project; projects may have no tasks.</text>
+  <rect x="1380" y="590" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="1475.0" y="622.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">TASK</text>
+  <ellipse cx="1475.0" cy="538.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="1475.0" y="543.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">task_id</text>
+  <polyline points="1475,558 1475,590" fill="none" stroke="#70819a" stroke-width="2" />
+  <rect x="2270" y="590" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="2365.0" y="622.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">WORK_LOG</text>
+  <ellipse cx="2365.0" cy="538.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="2365.0" y="543.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">log_id</text>
+  <polyline points="2365,558 2365,590" fill="none" stroke="#70819a" stroke-width="2" />
+  <polygon points="1915.0,579 2005,617.0 1915.0,655 1825,617.0" fill="#fff1d6" stroke="#a86a0a" stroke-width="2" />
+  <text x="1915.0" y="622.0" fill="#a86a0a" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">TRACKED BY</text>
+  <polyline points="1570,617 1825,617" fill="none" stroke="#70819a" stroke-width="2" />
+  <polyline points="2005,617 2270,617" fill="none" stroke="#70819a" stroke-width="2" />
+  <text x="1710.0" y="594.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">1</text>
+  <text x="2130.0" y="594.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">N</text>
+  <text x="1935.0" y="680.25" fill="#526782" font-family="Arial, sans-serif" font-size="15" text-anchor="middle">Every work log refers to one task; task history is retained by the API.</text>
+  <rect x="30" y="880" width="1240" height="760" rx="12" fill="white" stroke="#cfd9e8" stroke-width="2" />
+  <text x="54" y="921.7" fill="#182b49" font-family="Arial, sans-serif" font-size="22" text-anchor="start" font-weight="700">C. Assignments, authors and department projects</text>
+  <text x="54" y="950.9" fill="#526782" font-family="Arial, sans-serif" font-size="14" text-anchor="start">Relationship names distinguish current assignment from historical authorship.</text>
+  <rect x="100" y="1060" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="195.0" y="1092.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">EMPLOYEE</text>
+  <ellipse cx="195.0" cy="1008.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="195.0" y="1013.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">emp_id</text>
+  <polyline points="195,1028 195,1060" fill="none" stroke="#70819a" stroke-width="2" />
+  <rect x="990" y="1060" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="1085.0" y="1092.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">TASK</text>
+  <ellipse cx="1085.0" cy="1008.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="1085.0" y="1013.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">task_id</text>
+  <polyline points="1085,1028 1085,1060" fill="none" stroke="#70819a" stroke-width="2" />
+  <polygon points="635.0,1049 725,1087.0 635.0,1125 545,1087.0" fill="#fff1d6" stroke="#a86a0a" stroke-width="2" />
+  <text x="635.0" y="1092.0" fill="#a86a0a" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">ASSIGNED TO</text>
+  <polyline points="290,1087 545,1087" fill="none" stroke="#70819a" stroke-width="2" />
+  <polyline points="725,1087 990,1087" fill="none" stroke="#70819a" stroke-width="2" />
+  <text x="430.0" y="1064.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">1</text>
+  <text x="850.0" y="1064.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">N</text>
+  <text x="655.0" y="1150.25" fill="#526782" font-family="Arial, sans-serif" font-size="15" text-anchor="middle">Each task has 0..1 current assignee; employees may have many tasks.</text>
+  <rect x="100" y="1280" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="195.0" y="1312.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">EMPLOYEE</text>
+  <ellipse cx="195.0" cy="1228.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="195.0" y="1233.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">emp_id</text>
+  <polyline points="195,1248 195,1280" fill="none" stroke="#70819a" stroke-width="2" />
+  <rect x="990" y="1280" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="1085.0" y="1312.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">WORK_LOG</text>
+  <ellipse cx="1085.0" cy="1228.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="1085.0" y="1233.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">log_id</text>
+  <polyline points="1085,1248 1085,1280" fill="none" stroke="#70819a" stroke-width="2" />
+  <polygon points="635.0,1269 725,1307.0 635.0,1345 545,1307.0" fill="#fff1d6" stroke="#a86a0a" stroke-width="2" />
+  <text x="635.0" y="1312.0" fill="#a86a0a" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">LOGS</text>
+  <polyline points="290,1307 545,1307" fill="none" stroke="#70819a" stroke-width="2" />
+  <polyline points="725,1307 990,1307" fill="none" stroke="#70819a" stroke-width="2" />
+  <text x="430.0" y="1284.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">1</text>
+  <text x="850.0" y="1284.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">N</text>
+  <text x="655.0" y="1370.25" fill="#526782" font-family="Arial, sans-serif" font-size="15" text-anchor="middle">Every work log has exactly one original employee author.</text>
+  <rect x="100" y="1500" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="195.0" y="1532.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">DEPARTMENT</text>
+  <ellipse cx="195.0" cy="1448.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="195.0" y="1453.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">dept_id</text>
+  <polyline points="195,1468 195,1500" fill="none" stroke="#70819a" stroke-width="2" />
+  <rect x="990" y="1500" width="190" height="54" rx="4" fill="#e6eefb" stroke="#335786" stroke-width="2" />
+  <text x="1085.0" y="1532.0" fill="#335786" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">PROJECT</text>
+  <ellipse cx="1085.0" cy="1448.0" rx="75.0" ry="20.0" fill="#e8f6ee" stroke="#3d7756" stroke-width="1.5" />
+  <text x="1085.0" y="1453.0" fill="#3d7756" font-family="Arial, sans-serif" font-size="15" font-weight="700" text-anchor="middle" text-decoration="underline">project_id</text>
+  <polyline points="1085,1468 1085,1500" fill="none" stroke="#70819a" stroke-width="2" />
+  <polygon points="635.0,1489 725,1527.0 635.0,1565 545,1527.0" fill="#fff1d6" stroke="#a86a0a" stroke-width="2" />
+  <text x="635.0" y="1532.0" fill="#a86a0a" font-family="Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">OWNS</text>
+  <polyline points="290,1527 545,1527" fill="none" stroke="#70819a" stroke-width="2" />
+  <polyline points="725,1527 990,1527" fill="none" stroke="#70819a" stroke-width="2" />
+  <text x="430.0" y="1504.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">1</text>
+  <text x="850.0" y="1504.95" fill="#182b49" font-family="Arial, sans-serif" font-size="17" text-anchor="middle" font-weight="700">N</text>
+  <text x="655.0" y="1590.25" fill="#526782" font-family="Arial, sans-serif" font-size="15" text-anchor="middle">A project may belong to 0..1 department; a department may own many projects.</text>
+  <rect x="1310" y="880" width="1240" height="760" rx="12" fill="white" stroke="#cfd9e8" stroke-width="2" />
+  <text x="1334" y="921.7" fill="#182b49" font-family="Arial, sans-serif" font-size="22" text-anchor="start" font-weight="700">D. Further relationships</text>
+  <text x="1334" y="950.9" fill="#526782" font-family="Arial, sans-serif" font-size="14" text-anchor="start">Continue in er_diagram_chen_details.svg / .drawio; both sheets form this ER model.</text>
+  <text x="1350" y="1037.3" fill="#182b49" font-family="Arial, sans-serif" font-size="18" text-anchor="start">EMPLOYEE — HAS SKILL — SKILL  (M:N; proficiency belongs to the relationship)</text>
+  <text x="1350" y="1113.3" fill="#182b49" font-family="Arial, sans-serif" font-size="18" text-anchor="start">EMPLOYEE (manager) — MANAGES — EMPLOYEE (report)  (1:N; optional manager)</text>
+  <text x="1350" y="1189.3" fill="#182b49" font-family="Arial, sans-serif" font-size="18" text-anchor="start">EMPLOYEE (head) — HEADS — DEPARTMENT  (1:N; optional department head)</text>
+  <text x="1350" y="1265.3" fill="#182b49" font-family="Arial, sans-serif" font-size="18" text-anchor="start">EMPLOYEE — FILES — RESIGNATION  (1:0..1)</text>
+  <text x="1350" y="1341.3" fill="#182b49" font-family="Arial, sans-serif" font-size="18" text-anchor="start">EMPLOYEE (successor) — RECEIVES HANDOVER — RESIGNATION  (1:N)</text>
+  <text x="1350" y="1417.3" fill="#182b49" font-family="Arial, sans-serif" font-size="18" text-anchor="start">EMPLOYEE — HAS SNAPSHOT — ai_work_summaries  (1:N; logical cross-engine link)</text>
+  <text x="1350" y="1542.6" fill="#526782" font-family="Arial, sans-serif" font-size="16" text-anchor="start">Solid blue entities: MySQL tables. Dashed red entity: PostgreSQL/pgvector.</text>
+</svg>
