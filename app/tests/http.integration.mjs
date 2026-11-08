@@ -143,7 +143,7 @@ test('HTTP workflow against isolated seeded databases', { timeout: 180000 }, asy
     await alphaClient.request('/api/employees/' + beta + '/summary', {}, 403);
     const generated = await alphaClient.request(path, { method: 'POST' }, 201);
     assert.equal(generated.generation_method, 'record');
-    assert.equal(generated.searchable, false);
+    assert.equal(generated.searchable, true);
     assert.equal(generated.stale, false);
     assert.ok(generated.source_log_ids.includes(log));
     assert.ok(generated.source_task_ids.includes(task));
@@ -156,8 +156,38 @@ test('HTTP workflow against isolated seeded databases', { timeout: 180000 }, asy
     const refreshed = await alphaClient.request(path, { method: 'POST' }, 201);
     assert.notEqual(refreshed.summary_id, generated.summary_id);
     assert.equal((await alphaClient.request(path)).stale, false);
-    const unavailable = await admin.request('/api/search/semantic', { method: 'POST', body: { question: 'integration contribution' } }, 503);
-    assert.match(unavailable.error, /OPENAI_API_KEY|EMBEDDING_API_KEY/);
+  });
+  await t.test('vector search, read, update (re-embed) and delete through the API', async () => {
+    const latest = await alphaClient.request('/api/employees/' + alpha + '/summary');
+    // SEARCH: the generated summary is findable using its own distinctive words
+    const found = await admin.request('/api/search/semantic', { method: 'POST', body: { question: 'integration contribution ' + prefix } });
+    assert.ok(found.results.some((r) => r.emp_id === alpha && r.summary_id === latest.summary_id), 'own summary is found');
+    assert.ok(found.embedding_model);
+    // READ (history + single) and access control
+    const history = await alphaClient.request('/api/employees/' + alpha + '/summaries');
+    assert.ok(history.length >= 2 && history[0].summary_id === latest.summary_id);
+    assert.equal(history[0].has_embedding, true); assert.equal(history[0].embedding, undefined);
+    await betaClient.request('/api/employees/' + alpha + '/summaries', {}, 403);
+    assert.equal((await alphaClient.request('/api/summaries/' + latest.summary_id)).emp_id, alpha);
+    await betaClient.request('/api/summaries/' + latest.summary_id, {}, 404);
+    await alphaClient.request('/api/summaries/' + latest.summary_id, { method: 'PUT', body: { summary_text: 'nope' } }, 403);
+    await alphaClient.request('/api/summaries/' + latest.summary_id, { method: 'DELETE' }, 403);
+    await admin.request('/api/summaries/0', {}, 400);
+    await admin.request('/api/summaries/999999999', {}, 404);
+    // UPDATE re-embeds: search by the new unique word finds the edited row
+    const word = 'zxqvortex' + Date.now().toString(36);
+    await admin.request('/api/summaries/' + latest.summary_id, { method: 'PUT', body: { summary_text: '' } }, 400);
+    await admin.request('/api/summaries/' + latest.summary_id, { method: 'PUT', body: { summary_text: 'x', extra: 1 } }, 400);
+    const edited = await admin.request('/api/summaries/' + latest.summary_id, { method: 'PUT', body: { summary_text: 'Edited handover note about ' + word + ' pipeline' } });
+    assert.equal(edited.generation_method, 'edited'); assert.equal(edited.has_embedding, true);
+    const afterEdit = await admin.request('/api/search/semantic', { method: 'POST', body: { question: word + ' pipeline' } });
+    assert.equal(afterEdit.results[0].summary_id, latest.summary_id, 'edited text is ranked first for its new words');
+    // DELETE removes it from search and history
+    await admin.request('/api/summaries/' + latest.summary_id, { method: 'DELETE' }, 204);
+    await admin.request('/api/summaries/' + latest.summary_id, {}, 404);
+    const afterDelete = await admin.request('/api/search/semantic', { method: 'POST', body: { question: word + ' pipeline' } });
+    assert.ok(!afterDelete.results.some((r) => r.summary_id === latest.summary_id));
+    assert.ok(!(await alphaClient.request('/api/employees/' + alpha + '/summaries')).some((r) => r.summary_id === latest.summary_id));
   });
   await t.test('history-preserving deletion and manager cycle protections', async () => {
     await admin.request('/api/tasks/' + task, { method: 'DELETE' }, 409);

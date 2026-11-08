@@ -1,0 +1,359 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="model" name="Relational schema and vector store">
+    <mxGraphModel dx="2460" dy="1740" grid="1" gridSize="10" page="1" pageWidth="2460" pageHeight="1740">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="Workload Management System | physical schema" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=30;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="35" y="20" width="2390" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="PK = primary key; UQ = unique; NN = NOT NULL; FK targets are explicit. Nullable fields participate optionally." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=17;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="35" y="72" width="2390" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="" style="rounded=1;fillColor=#ffffff;strokeColor=#cfd9e8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="20" y="120" width="1560" height="1545" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="MySQL | normalized operational database" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="44" y="138" width="1512" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="Nine tables; ENUM domains, keys and data checks match database/mysql/01_schema.sql." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="44" y="173" width="1512" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="DEPARTMENT" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="45" y="240" width="480" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="" style="fillColor=#ffffff;strokeColor=#bdcce0;" vertex="1" parent="1">
+          <mxGeometry x="45" y="286" width="480" height="107" as="geometry" />
+        </mxCell>
+        <mxCell id="c8" value="dept_id INT [PK, AUTO_INCREMENT]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="57" y="292" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c9" value="dept_name VARCHAR(100) [NN, UQ]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="57" y="323" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c10" value="head_emp_id INT [FK → EMPLOYEE.emp_id; nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="57" y="354" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c11" value="EMPLOYEE" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="555" y="240" width="480" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="c12" value="" style="fillColor=#ffffff;strokeColor=#bdcce0;" vertex="1" parent="1">
+          <mxGeometry x="555" y="286" width="480" height="293" as="geometry" />
+        </mxCell>
+        <mxCell id="c13" value="emp_id INT [PK, AUTO_INCREMENT]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="292" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c14" value="name VARCHAR(100) [NN]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="323" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c15" value="email VARCHAR(100) [NN, UQ]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="354" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c16" value="phone VARCHAR(15) [nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="385" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c17" value="designation VARCHAR(100) [nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="416" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c18" value="dept_id INT [FK → DEPARTMENT.dept_id; nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="447" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c19" value="manager_id INT [FK → EMPLOYEE.emp_id; nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="478" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c20" value="date_of_joining DATE [NN]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="509" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c21" value="status ENUM(active,resigned) [NN; default active]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="540" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c22" value="USER_ACCOUNT" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1065" y="240" width="480" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="c23" value="" style="fillColor=#ffffff;strokeColor=#bdcce0;" vertex="1" parent="1">
+          <mxGeometry x="1065" y="286" width="480" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="c24" value="user_id INT [PK, AUTO_INCREMENT]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="292" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c25" value="emp_id INT [NN, UQ; FK → EMPLOYEE.emp_id]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="323" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c26" value="username VARCHAR(50) [NN, UQ]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="354" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c27" value="password_hash VARCHAR(255) [NN; bcrypt]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="385" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c28" value="role ENUM(admin,employee) [NN; default employee]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="416" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c29" value="created_at DATETIME [NN; default CURRENT_TIMESTAMP]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="447" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c30" value="SKILL" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="45" y="700" width="480" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="c31" value="" style="fillColor=#ffffff;strokeColor=#bdcce0;" vertex="1" parent="1">
+          <mxGeometry x="45" y="746" width="480" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="c32" value="skill_id INT [PK, AUTO_INCREMENT]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="57" y="752" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c33" value="skill_name VARCHAR(100) [NN, UQ]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="57" y="783" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c34" value="EMPLOYEE_SKILL" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="555" y="700" width="480" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="c35" value="" style="fillColor=#ffffff;strokeColor=#bdcce0;" vertex="1" parent="1">
+          <mxGeometry x="555" y="746" width="480" height="138" as="geometry" />
+        </mxCell>
+        <mxCell id="c36" value="emp_id INT [PK(1), NN; FK → EMPLOYEE.emp_id]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="752" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c37" value="skill_id INT [PK(2), NN; FK → SKILL.skill_id]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="783" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c38" value="proficiency ENUM(beginner,intermediate,advanced,expert)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="814" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c39" value="  [nullable; default intermediate]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="845" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c40" value="PROJECT" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1065" y="700" width="480" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="c41" value="" style="fillColor=#ffffff;strokeColor=#bdcce0;" vertex="1" parent="1">
+          <mxGeometry x="1065" y="746" width="480" height="293" as="geometry" />
+        </mxCell>
+        <mxCell id="c42" value="project_id INT [PK, AUTO_INCREMENT]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="752" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c43" value="project_name VARCHAR(150) [NN]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="783" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c44" value="description TEXT [nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="814" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c45" value="start_date DATE [nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="845" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c46" value="end_date DATE [nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="876" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c47" value="status ENUM(planned,ongoing,completed,on_hold)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="907" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c48" value="  [NN; default planned]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="938" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c49" value="dept_id INT [FK → DEPARTMENT.dept_id; nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="969" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c50" value="CHECK: end_date ≥ start_date when both exist" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="1000" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c51" value="TASK" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="45" y="1160" width="480" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="c52" value="" style="fillColor=#ffffff;strokeColor=#bdcce0;" vertex="1" parent="1">
+          <mxGeometry x="45" y="1206" width="480" height="324" as="geometry" />
+        </mxCell>
+        <mxCell id="c53" value="task_id INT [PK, AUTO_INCREMENT]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="57" y="1212" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c54" value="project_id INT [NN; FK → PROJECT.project_id]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="57" y="1243" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c55" value="assigned_to INT [FK → EMPLOYEE.emp_id; nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="57" y="1274" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c56" value="title VARCHAR(150) [NN]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="57" y="1305" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c57" value="description TEXT [nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="57" y="1336" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c58" value="priority ENUM(low,medium,high,critical) [NN; default medium]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="57" y="1367" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c59" value="status ENUM(not_started,in_progress,completed,blocked)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="57" y="1398" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c60" value="  [NN; default not_started]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="57" y="1429" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c61" value="start_date, due_date, completion_date DATE [nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="57" y="1460" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c62" value="CHECK: due_date ≥ start_date when both exist" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="57" y="1491" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c63" value="WORK_LOG" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="555" y="1160" width="480" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="c64" value="" style="fillColor=#ffffff;strokeColor=#bdcce0;" vertex="1" parent="1">
+          <mxGeometry x="555" y="1206" width="480" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="c65" value="log_id INT [PK, AUTO_INCREMENT]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="1212" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c66" value="task_id INT [NN; FK → TASK.task_id]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="1243" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c67" value="emp_id INT [NN; FK → EMPLOYEE.emp_id]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="1274" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c68" value="log_date DATE [NN]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="1305" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c69" value="hours_spent DECIMAL(4,2) [NN; CHECK 0 &lt; hours ≤ 24]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="1336" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c70" value="notes TEXT [nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="567" y="1367" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c71" value="RESIGNATION" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#e6eefb;strokeColor=#335786;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1065" y="1160" width="480" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="c72" value="" style="fillColor=#ffffff;strokeColor=#bdcce0;" vertex="1" parent="1">
+          <mxGeometry x="1065" y="1206" width="480" height="231" as="geometry" />
+        </mxCell>
+        <mxCell id="c73" value="resignation_id INT [PK, AUTO_INCREMENT]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="1212" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c74" value="emp_id INT [NN, UQ; FK → EMPLOYEE.emp_id]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="1243" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c75" value="resignation_date DATE [NN]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="1274" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c76" value="last_working_day DATE [NN]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="1305" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c77" value="handover_notes TEXT [nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="1336" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c78" value="handover_to INT [FK → EMPLOYEE.emp_id; nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="1367" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c79" value="CHECK: last_working_day ≥ resignation_date" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1077" y="1398" width="456" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c80" value="" style="rounded=1;fillColor=#ffffff;strokeColor=#cfd9e8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1610" y="120" width="825" height="1545" as="geometry" />
+        </mxCell>
+        <mxCell id="c81" value="PostgreSQL 16 + pgvector | separate database" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1634" y="138" width="777" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c82" value="Application joins use emp_id. There is NO cross-engine foreign key." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1634" y="173" width="777" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="c83" value="ai_work_summaries" style="whiteSpace=wrap;html=0;fontFamily=Arial;fontSize=17;fontStyle=1;fillColor=#fbe9ec;strokeColor=#a74358;strokeWidth=2;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="245" width="765" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="c84" value="" style="fillColor=#ffffff;strokeColor=#bdcce0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="291" width="765" height="417" as="geometry" />
+        </mxCell>
+        <mxCell id="c85" value="summary_id SERIAL [PK]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1652" y="297" width="741" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c86" value="emp_id INTEGER [NN; logical employee reference]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1652" y="328" width="741" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c87" value="generated_on TIMESTAMPTZ [NN; default NOW()]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1652" y="359" width="741" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c88" value="summary_text TEXT [NN]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1652" y="390" width="741" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c89" value="source_context VARCHAR(255) [nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1652" y="421" width="741" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c90" value="generation_method VARCHAR(20) [NN; default provider]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1652" y="452" width="741" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c91" value="source_fingerprint CHAR(64) [nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1652" y="483" width="741" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c92" value="embedding_model VARCHAR(120) [nullable]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1652" y="514" width="741" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c93" value="source_log_ids JSONB [NN; default []]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1652" y="545" width="741" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c94" value="source_task_ids JSONB [NN; default []]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1652" y="576" width="741" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c95" value="embedding VECTOR(1536) [nullable for record-only summary]" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1652" y="607" width="741" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c96" value="HNSW (embedding vector_cosine_ops)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1652" y="638" width="741" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c97" value="INDEX (emp_id); INDEX (emp_id, generated_on DESC, summary_id DESC)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12.5;fontColor=#263f60;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1652" y="669" width="741" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c98" value="MySQL foreign-key behavior and cardinalities" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=21;fontColor=#182b49;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="750" width="765" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c99" value="DEPARTMENT.head_emp_id → EMPLOYEE  (N:1; optional head)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="805" width="760" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c100" value="EMPLOYEE.dept_id → DEPARTMENT  (N:1; optional)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="842" width="760" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c101" value="EMPLOYEE.manager_id → EMPLOYEE  (N:1; optional manager)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="879" width="760" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c102" value="USER_ACCOUNT.emp_id → EMPLOYEE  (0..1 account : 1 employee)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="916" width="760" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c103" value="EMPLOYEE_SKILL.emp_id → EMPLOYEE  (N:1)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="953" width="760" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c104" value="EMPLOYEE_SKILL.skill_id → SKILL  (N:1)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="990" width="760" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c105" value="PROJECT.dept_id → DEPARTMENT  (N:1; optional)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1027" width="760" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c106" value="TASK.project_id → PROJECT  (N:1; mandatory)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1064" width="760" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c107" value="TASK.assigned_to → EMPLOYEE  (N:1; optional)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1101" width="760" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c108" value="WORK_LOG.task_id → TASK  (N:1; mandatory)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1138" width="760" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c109" value="WORK_LOG.emp_id → EMPLOYEE  (N:1; mandatory)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1175" width="760" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c110" value="RESIGNATION.emp_id → EMPLOYEE  (0..1 notice : 1 employee)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1212" width="760" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c111" value="RESIGNATION.handover_to → EMPLOYEE  (N:1; optional)" style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#182b49;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1249" width="760" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="c112" value="All FK updates cascade. Nullable FKs use ON DELETE SET NULL." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1345" width="760" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="c113" value="Other FKs use ON DELETE CASCADE. The API blocks history-erasing deletes." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1393" width="760" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="c114" value="Triggers/procedure add ownership, completion, date and handover rules." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1441" width="760" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="c115" value="v_employee_effective_status computes expiry after the last working day." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1489" width="760" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="c116" value="Vector source IDs are logical evidence references; never DB-enforced FKs." style="text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#526782;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1537" width="760" height="42" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

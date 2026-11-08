@@ -19,6 +19,7 @@ services:
       - ./database/mysql/04_views.sql:/docker-entrypoint-initdb.d/04_views.sql:ro
       - ./database/mysql/05_procedures_functions.sql:/docker-entrypoint-initdb.d/05_procedures_functions.sql:ro
       - ./database/mysql/06_triggers.sql:/docker-entrypoint-initdb.d/06_triggers.sql:ro
+      - ./database/mysql/08_roles.sql:/docker-entrypoint-initdb.d/08_roles.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "MYSQL_PWD=\"$${MYSQL_PASSWORD}\" mysql --protocol=TCP -h 127.0.0.1 -u\"$${MYSQL_USER}\" -D\"$${MYSQL_DATABASE}\" -e 'SELECT 1 FROM EMPLOYEE LIMIT 1' >/dev/null 2>&1"]
       interval: 5s

@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { PGlite } from '@electric-sql/pglite';
 import { vector } from '@electric-sql/pglite-pgvector';
-import { insertSummary, searchSimilarSummaries } from '../lib/pgvector.js';
+import { insertSummary, searchSimilarSummaries, getSummary, listSummaries, updateSummary, deleteSummary } from '../lib/pgvector.js';
+import { localEmbedding } from '../lib/ai.mjs';
 
 test('real pgvector schema, cache metadata, latest-only ranking and model isolation', async () => {
   const db = new PGlite({ extensions: { vector } });
@@ -62,5 +63,47 @@ test('runnable vector CRUD demonstration changes captured rows and rolls back cl
       const remaining = await db.query('SELECT emp_id,summary_text FROM ai_work_summaries');
       assert.deepEqual(remaining.rows, [{ emp_id: 42, summary_text: 'Existing cache must be preserved' }]);
     }
+  } finally { await db.close(); }
+});
+
+test('application-level vector read, update (re-embed) and delete change the real index', async () => {
+  const db = new PGlite({ extensions: { vector } });
+  try {
+    await db.exec(await readFile(new URL('../../database/pgvector/01_setup.sql', import.meta.url), 'utf8'));
+    const payment = localEmbedding('payment gateway integration card payments');
+    const cloud = localEmbedding('kubernetes cluster migration network policies');
+    const make = (empId, text, embedding) => insertSummary({
+      empId, summaryText: text, sourceContext: 'rud', embedding, generationMethod: 'record',
+      sourceFingerprint: 'b'.repeat(64), sourceLogIds: [], sourceTaskIds: [],
+    }, db);
+    const { embeddingModel } = await import('../lib/ai.mjs');
+    const one = await make(1, 'payment gateway integration card payments', payment);
+    const two = await make(2, 'kubernetes cluster migration network policies', cloud);
+    // READ
+    const read = await getSummary(one.summary_id, db);
+    assert.equal(read.emp_id, 1); assert.equal(read.has_embedding, true);
+    assert.equal(read.embedding, undefined, 'raw vector is never returned');
+    assert.equal(await getSummary(999999, db), null);
+    assert.deepEqual((await listSummaries(1, 20, db)).map((r) => r.summary_id), [one.summary_id]);
+    // search before update: employee 1 owns the payment vector
+    let hits = await searchSimilarSummaries(payment, 5, db);
+    assert.equal(hits[0].emp_id, 1);
+    // UPDATE: change text AND vector; the same row now ranks first for cloud queries
+    const updated = await updateSummary(one.summary_id, { summaryText: 'kubernetes migration lead', embedding: localEmbedding('kubernetes migration lead') }, db);
+    assert.equal(updated.generation_method, 'edited');
+    assert.equal(updated.summary_text, 'kubernetes migration lead');
+    assert.equal(updated.embedding_model, embeddingModel());
+    assert.equal((await db.query('SELECT count(*)::int AS n FROM ai_work_summaries')).rows[0].n, 2, 'update never inserts');
+    hits = await searchSimilarSummaries(localEmbedding('kubernetes migration'), 5, db);
+    assert.equal(hits[0].emp_id, 1, 'edited vector now matches kubernetes queries best');
+    assert.equal(hits[0].summary_text, 'kubernetes migration lead');
+    assert.equal(await updateSummary(999999, { summaryText: 'x', embedding: payment }, db), null);
+    // DELETE removes the vector from search
+    assert.equal(await deleteSummary(one.summary_id, db), true);
+    assert.equal(await deleteSummary(one.summary_id, db), false);
+    assert.equal(await getSummary(one.summary_id, db), null);
+    hits = await searchSimilarSummaries(localEmbedding('kubernetes migration'), 5, db);
+    assert.deepEqual(hits.map((r) => r.emp_id), [2]);
+    assert.ok(two.summary_id);
   } finally { await db.close(); }
 });

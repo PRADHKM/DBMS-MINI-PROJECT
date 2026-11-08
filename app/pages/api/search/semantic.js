@@ -1,6 +1,7 @@
 import { embedText, searchSimilarSummaries } from '../../../lib/pgvector';
 import { query } from '../../../lib/mysql';
 import { loadWorkContext } from '../../../lib/work-context';
+import { embeddingModel } from '../../../lib/ai.mjs';
 import { requireRole } from '../../../lib/auth';
 import { apiHandler, text, assertFields } from '../../../lib/api';
 
@@ -21,5 +22,6 @@ export default apiHandler(async (req, res) => {
     return { ...match, employee: byId.get(match.emp_id), stale: source?.fingerprint !== match.source_fingerprint };
   }));
   return res.status(200).json({ question, results,
-    note: results.length ? 'Cosine similarity measures relatedness, not confidence. Stale summaries should be regenerated.' : 'No embedded summaries found. Generate employee summaries after configuring the embedding key.' });
+    embedding_model: embeddingModel(),
+    note: results.length ? 'Cosine similarity measures relatedness, not confidence. Stale summaries should be regenerated.' : 'No embedded summaries found for the current embedding model. Generate employee summaries from their profiles, then search again.' });
 }, ['POST']);

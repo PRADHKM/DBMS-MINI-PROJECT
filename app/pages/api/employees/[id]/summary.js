@@ -1,5 +1,5 @@
 import { embedText, insertSummary, getPgPool } from '../../../../lib/pgvector';
-import { generateSummary, hasEmbeddingKey } from '../../../../lib/ai.mjs';
+import { generateSummary } from '../../../../lib/ai.mjs';
 import { loadWorkContext } from '../../../../lib/work-context';
 import { requireSession } from '../../../../lib/auth';
 import { apiHandler, parseId, fail, canAccessEmployee } from '../../../../lib/api';
@@ -22,7 +22,7 @@ export default apiHandler(async (req, res) => {
     return res.status(200).json({ ...rows[0], stale: rows[0].source_fingerprint !== source.fingerprint });
   }
   const generated = await generateSummary(source.context);
-  const embedding = hasEmbeddingKey() ? await embedText(generated.text) : null;
+  const embedding = await embedText(generated.text);
   const saved = await insertSummary({
     empId: id, summaryText: generated.text, embedding,
     sourceContext: 'On-demand work history and current task snapshot',

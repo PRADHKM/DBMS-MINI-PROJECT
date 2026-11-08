@@ -46,3 +46,27 @@ The Chen model is now supplied as main and details sheets, with matching editabl
 Historical reference editors preserve the current resigned assignee/manager/head while rejecting newly selected ineligible people. Protected page rendering and API authorization both re-read current role and employment. Task project edits and manager hierarchy changes hold appropriate transaction locks. The new concurrency test observes a genuinely blocked update before inserting a log, and verifies the resulting409 preserves the original project.
 
 Changed muted text colors were checked computationally at >=4.73:1, and active navigation exposes aria-current. This was scoped visual/accessibility polish, not a claim of full WCAG conformance.
+
+## Re-verification and vector completion (8 November 2026, Linux, Node 22.23.1)
+
+Executed against the project's own Compose stack (MySQL 8.4.13, pgvector/pgvector:pg16 with pgvector 0.8.7), not emulators.
+
+| Check | Result |
+|---|---|
+| `docker compose up -d --wait` | PASS — both services healthy; schema, seed, views, procedures, triggers and vector schema imported |
+| `npm test` | PASS — 20 tests (3 new: offline embedding, provider selection, application vector RUD) |
+| `npm run build` | PASS |
+| `npm run test:db` (app account) | PASS — 6, 1 skipped (fault injection needs trigger privilege) |
+| `npm run test:db` (root, disposable DB) | PASS — 7, 0 skipped; mid-handover rollback verified |
+| `npm run test:http` | PASS — 10 workflow groups incl. new vector search/read/update/delete group |
+| `concurrency.integration.mjs` | PASS — 4 |
+| Playwright (system Chrome) | PASS — 6 tests incl. new vector search/edit/delete UI and employee read-only checks |
+| `02_crud_examples.sql` on real pgvector | PASS — similarity 1 and 0, update to 0.8, delete, rollback |
+| `03_dml_demo.sql`, `07_advanced_queries.sql` on MySQL 8.4 | PASS — exit 0, expected output |
+| `EXPLAIN` of cosine ordering with sequential scans disabled | `Index Scan using idx_ai_summaries_embedding` (HNSW) |
+
+Changes made: application-level vector read/update/delete (previously SQL demo only), offline `local-hash-v1` embedding so summaries are always embedded and searchable without an API key, history panel on the profile page, and restoration of ER/relational schema documents missing from git. Limits: no live OpenAI request was made; `local-hash-v1` ranks shared vocabulary, not meaning.
+
+### Database-level RBAC (8 November 2026)
+
+`database/mysql/08_roles.sql` adds `wms_admin_role` and `wms_employee_role`. `npm run test:rbac` (8 checks) passes on a fresh Compose volume, so Compose loads the roles. It proves that the employee account is refused `USER_ACCOUNT`, `RESIGNATION`, the handover view, master-record deletes, non-progress column updates and the handover procedure. It also proves that the admin account can read and update data and run the procedure but is refused DDL, `GRANT` and `CREATE USER`. The web app itself still connects as `wms_app`.
