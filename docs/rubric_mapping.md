@@ -23,7 +23,7 @@ Reviewed against the supplied PES University DBMS Aug-Dec 2026 Level 3 assessmen
 ## Remaining submission actions
 
 1. Compose startup (MySQL 8.4 and pgvector/pg16) was verified on 2026-11-08; repeat it on the demonstration machine.
-2. Configure a real provider key and demonstrate AI generation/semantic relevance if those are presented as live AI features. Key-free summaries are explicitly record-based and use the offline lexical `local-hash-v1` embedding.
+2. Be ready to explain that summaries are record-based and embedded with the offline lexical `local-hash-v1` model: similarity reflects shared vocabulary, not neural semantics.
 3. Four database/backend commits are published on main under Pradhyut21. The friend reviews and commits the four remaining work groups using their own identity. Equal counts remain pending until both histories exist.
 4. Confirm genuine names/contributions and rehearse the schema, normalization, transaction failure case, recursive query, vector read/update/delete and cosine-search explanation.
 

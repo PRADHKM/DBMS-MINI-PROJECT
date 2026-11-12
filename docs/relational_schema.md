@@ -153,10 +153,10 @@ vector-search problem, not a relational one.
 | summary_id | SERIAL | PK |
 | emp_id | INTEGER | NOT NULL; logical reference to MySQL EMPLOYEE(emp_id) — not an enforced FK (cross-database) |
 | generated_on | TIMESTAMPTZ | NOT NULL, DEFAULT NOW() |
-| summary_text | TEXT | NOT NULL; provider-generated or explicitly labelled record-based summary |
+| summary_text | TEXT | NOT NULL; record-based summary built from MySQL work records |
 | source_context | VARCHAR(255) | Description of snapshot origin |
-| embedding | VECTOR(1536) | Nullable when no embedding provider is configured |
-| generation_method | VARCHAR(20) | NOT NULL, DEFAULT 'provider'; application writes `provider` or `record` |
+| embedding | VECTOR(1536) | Offline `local-hash-v1` embedding of `summary_text`; nullable |
+| generation_method | VARCHAR(20) | NOT NULL, DEFAULT 'record'; application writes `record` (or `edited` after an admin edit) |
 | source_fingerprint | CHAR(64) | SHA-256 fingerprint for stale-summary detection |
 | embedding_model | VARCHAR(120) | Prevents mixing incompatible embedding models |
 | source_log_ids | JSONB | NOT NULL, DEFAULT []; logical MySQL work-log evidence IDs |
