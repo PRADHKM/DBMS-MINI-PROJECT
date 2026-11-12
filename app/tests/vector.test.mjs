@@ -14,12 +14,12 @@ test('real pgvector schema, cache metadata, latest-only ranking and model isolat
     const north = [0, 1, ...Array(1534).fill(0)];
     const make = (empId, embedding, text = 'Access checks') => insertSummary({
       empId, summaryText: text, sourceContext: 'integration', embedding,
-      generationMethod: embedding ? 'provider' : 'record', sourceFingerprint: 'a'.repeat(64),
+      generationMethod: 'record', sourceFingerprint: 'a'.repeat(64),
       sourceLogIds: [1, 2], sourceTaskIds: [3],
     }, db);
     const first = await make(1, east);
     assert.deepEqual(first.source_log_ids, [1, 2]);
-    assert.equal(first.generation_method, 'provider');
+    assert.equal(first.generation_method, 'record');
     await make(1, north, 'Most recent summary');
     await make(2, east);
     let results = await searchSimilarSummaries(east, 5, db);

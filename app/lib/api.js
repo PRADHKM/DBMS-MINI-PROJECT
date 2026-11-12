@@ -19,7 +19,7 @@ export function apiHandler(handler, allowedMethods) {
       if (err.sqlState === '45000') return res.status(400).json({ error: err.sqlMessage || 'The database rejected this change' });
       if (['ER_CHECK_CONSTRAINT_VIOLATED', 'WARN_DATA_TRUNCATED', 'ER_DATA_TOO_LONG', 'ER_TRUNCATED_WRONG_VALUE'].includes(err.code)) return res.status(400).json({ error: 'One or more values violate database rules' });
       console.error('API request failed:', err.code || err.name || 'Error', err.message);
-      return res.status(503).json({ error: 'The service is unavailable. Check the server database and provider configuration.' });
+      return res.status(503).json({ error: 'The service is unavailable. Check the server database configuration.' });
     }
   };
 }

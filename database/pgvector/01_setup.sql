@@ -21,9 +21,9 @@ CREATE TABLE ai_work_summaries (
     summary_id      SERIAL PRIMARY KEY,
     emp_id          INTEGER NOT NULL,          -- logical FK -> MySQL EMPLOYEE.emp_id
     generated_on    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    summary_text    TEXT NOT NULL,             -- the LLM-generated summary
+    summary_text    TEXT NOT NULL,             -- record-based summary built from MySQL work records
     source_context  VARCHAR(255),              -- e.g. "auto-generated on resignation", "manual query"
-    generation_method VARCHAR(20) NOT NULL DEFAULT 'provider',
+    generation_method VARCHAR(20) NOT NULL DEFAULT 'record',
     source_fingerprint CHAR(64),
     embedding_model VARCHAR(120),              -- NULL for a record-only, unembedded summary
     source_log_ids JSONB NOT NULL DEFAULT '[]'::jsonb,
@@ -44,16 +44,16 @@ CREATE INDEX idx_ai_summaries_latest ON ai_work_summaries(emp_id, generated_on D
 -- Design notes (for your documentation section)
 -- ============================================================
 -- What gets embedded:
---   The generated summary_text (itself built by an LLM from that
+--   The generated summary_text (built deterministically from that
 --   employee's WORK_LOG.notes + TASK.title/description + PROJECT.name
 --   pulled from MySQL). Embedding the summary rather than every raw
 --   log line keeps the vector store compact and the search results
 --   coherent per employee rather than fragmented per log entry.
 --
 -- Embedding model:
---   Any standard text embedding model works, e.g. OpenAI
---   text-embedding-3-small (1536 dims) or a local sentence-transformers
---   model. Pick one and keep the VECTOR() dimension consistent with it.
+--   The application uses the built-in offline model local-hash-v1
+--   (1536 dims, feature hashing of words and word pairs). Any other
+--   embedding model works if the VECTOR() dimension stays consistent.
 --
 -- Similarity metric:
 --   Cosine similarity (vector_cosine_ops above). Query example:
