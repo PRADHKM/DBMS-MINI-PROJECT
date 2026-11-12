@@ -33,6 +33,10 @@ Compose binds MySQL to `127.0.0.1:3307` and PostgreSQL to `127.0.0.1:5433` to av
 
 Initialization runs only for new named volumes. This release targets a fresh database; it does not silently migrate an older scaffold database. Use a separate Compose project name for a new installation if existing volumes must be preserved. Do not execute the example DML files as startup migrations.
 
+## Demo
+
+One command runs everything for a presentation: `scripts/demo.sh all` (databases, app, extra sample data, summaries, SQL/RBAC/API walkthroughs and a similarity-search showcase). See [docs/demo.md](docs/demo.md) for the talk track and `scripts/demo.sh` for individual steps (`populate`, `search "question"`, `sql`, `rbac`, `api`, `test`, `reset`). `database/mysql/09_demo_extra.sql` holds the optional extra data; Compose does not load it.
+
 ## Using the application
 
 - **Overview:** employee directory, department filtering, workload counts and admin semantic search.
@@ -89,6 +93,7 @@ The application links databases using `emp_id`; a cross-engine foreign key is no
 | `database/mysql/01_schema.sql`, `02_seed.sql` | Tables, constraints, indexes and demo data |
 | `database/mysql/04_views.sql`–`06_triggers.sql` | Effective status/workload views, functions, procedures and integrity triggers |
 | `database/mysql/08_roles.sql` | Database-level RBAC: `wms_admin_role`, `wms_employee_role` and two demo accounts |
+| `database/mysql/09_demo_extra.sql`, `scripts/` | Optional extra sample data and the demo driver scripts |
 | `database/mysql/03_dml_demo.sql`, `07_advanced_queries.sql` | DML, joins, aggregation, nested queries, recursive CTEs and full-text examples |
 | `database/pgvector/` | Vector schema, HNSW index and CRUD examples (app equivalents in `app/lib/pgvector.js` and `app/pages/api/summaries/`) |
 | `app/pages/`, `app/pages/api/` | UI screens and authenticated CRUD/summary/search endpoints |

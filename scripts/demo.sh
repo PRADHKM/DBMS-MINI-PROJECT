@@ -2,11 +2,13 @@
 # Workload Management System - demo driver.
 #
 #   scripts/demo.sh setup    start Docker DBs, create app/.env.local, install, build, start app
+#   scripts/demo.sh populate load extra demo data (09_demo_extra.sql) + build a summary/embedding per employee
+#   scripts/demo.sh search "question"   similarity search; no question runs the preset showcase
 #   scripts/demo.sh sql      MySQL views/functions/procedures/DML/advanced queries + pgvector CRUD
 #   scripts/demo.sh api      live API walk-through (auth, summary, search, vector RUD, handover)
 #   scripts/demo.sh rbac     database-level role checks (wms_admin_role / wms_employee_role)
 #   scripts/demo.sh test     npm test, DB tests, HTTP tests (needs app running)
-#   scripts/demo.sh all      setup + sql + rbac + api   (default)
+#   scripts/demo.sh all      setup + populate + sql + rbac + api + search showcase   (default)
 #   scripts/demo.sh status   show containers and app state
 #   scripts/demo.sh stop     stop app and containers (data kept)
 #   scripts/demo.sh reset    stop and DELETE database volumes (asks first)
@@ -67,6 +69,25 @@ cmd_setup() {
     app_up || { tail -20 "$STATE/app.log"; die "app did not start (see .demo/app.log)"; }
   fi
   echo "Open $URL   admin: ravi.shankar / Passw0rd!   employee: ananya.rao / Passw0rd!"
+}
+
+cmd_populate() {
+  say "Extra demo data (4 projects, 14 tasks, ~35 work logs, skills)"
+  mysql_run <"$ROOT/database/mysql/09_demo_extra.sql"
+  note "re-running is safe: the file skips itself once loaded"
+  app_up || die "app not running at $URL - run: scripts/demo.sh setup"
+  say "Summaries and embeddings for every employee (pgvector)"
+  WMS_URL="$URL" node "$ROOT/scripts/demo-vector.mjs" populate
+}
+
+cmd_search() {
+  app_up || die "app not running at $URL - run: scripts/demo.sh setup"
+  if [ "$#" -eq 0 ]; then
+    say "Similarity search showcase"
+    WMS_URL="$URL" node "$ROOT/scripts/demo-vector.mjs" showcase
+  else
+    WMS_URL="$URL" node "$ROOT/scripts/demo-vector.mjs" search "$@"
+  fi
 }
 
 cmd_sql() {
@@ -167,6 +188,8 @@ cmd_reset() {
 
 case "${1:-all}" in
   setup)  cmd_setup ;;
+  populate) cmd_populate ;;
+  search) shift; cmd_search "$@" ;;
   sql)    cmd_sql ;;
   api)    cmd_api ;;
   rbac)   cmd_rbac ;;
@@ -174,6 +197,6 @@ case "${1:-all}" in
   status) cmd_status ;;
   stop)   cmd_stop ;;
   reset)  cmd_reset ;;
-  all)    cmd_setup; cmd_sql; cmd_rbac; cmd_api ;;
-  *)      sed -n '2,14p' "${BASH_SOURCE[0]}"; exit 1 ;;
+  all)    cmd_setup; cmd_populate; cmd_sql; cmd_rbac; cmd_api; cmd_search ;;
+  *)      sed -n '2,20p' "${BASH_SOURCE[0]}"; exit 1 ;;
 esac
