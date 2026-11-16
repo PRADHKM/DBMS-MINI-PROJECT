@@ -20,7 +20,7 @@ Run the automated test suites any time with `scripts/demo.sh test`.
 
 ## Live walkthrough (browser)
 
-1. **Overview** (sign in as admin). 12 seeded people plus the extra demo data: 10 projects, 35 tasks, about 60 work logs. Point out workload counts and the Resigned badge on Suresh.
+1. **Overview** (sign in as admin). 12 people, 8 projects, 26 tasks and about 58 work logs once the extra demo data is loaded. Point out workload counts and the Resigned badge on Suresh.
 2. **Open Suresh Pillai's profile.** His contribution history is complete even though he left: ten work logs on the Kubernetes migration (EKS via Terraform, Helm charts, CI/CD, canary rollout, cutover). Show the stored summary snapshot: record-based, with source log and task counts.
 3. **Handover page.** Show his resignation: notice date, last working day, notes, successor Vikram Reddy. The open "Write infra runbooks" task belongs to Vikram, while Suresh keeps his completed tasks and every work log he wrote. To show the live transfer, record a new resignation (Handover page, or `scripts/demo.sh api`) and watch the successor receive the open task.
 4. **Similarity search** (Overview, admin only). Type a question; results are ranked by cosine similarity over stored embeddings:
