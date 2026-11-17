@@ -18,7 +18,7 @@ export async function api(url, options = {}) {
 
 export function human(value) { return String(value || "—").replaceAll("_", " "); }
 export function date(value) { return value ? String(value).slice(0, 10) : "—"; }
-export function Pill({ value }) { return <span className={`pill ${value || ""}`}>{human(value)}</span>; }
+export function Pill({ value }) { return <span className={`pill ${value || ""}`}>{value === "notice_period" ? "On notice" : human(value)}</span>; }
 export function Alert({ children, success = false }) { return children ? <div className={`notice ${success ? "success" : "error"}`} role={success ? "status" : "alert"}>{children}</div> : null; }
 export function Empty({ children = "No records yet." }) { return <p className="empty">{children}</p>; }
 export function Table({ children }) { return <div className="table-wrap"><table>{children}</table></div>; }

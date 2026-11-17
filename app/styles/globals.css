@@ -83,7 +83,7 @@ td select { width: auto; min-width: 132px; font-size: 12px; min-height: 33px; pa
 .pill.active, .pill.completed { color: #286b45; background: #e6f3e6; }
 .pill.resigned, .pill.blocked, .pill.critical { color: #9c493b; background: #f8e8e2; }
 .pill.in_progress, .pill.ongoing { color: #326179; background: #e9f1f4; }
-.pill.high, .pill.on_hold { color: #825b1e; background: #fbf0d9; }
+.pill.high, .pill.on_hold, .pill.notice_period { color: #825b1e; background: #fbf0d9; }
 .notice { border: 1px solid #eed4ca; background: #fff3ec; color: #9f4a36; padding: 12px 15px; border-radius: 7px; font-size: 13px; margin-bottom: 18px; overflow-wrap: anywhere; }
 .notice.success { border-color: #d0e1c8; background: #edf7e8; color: #3e6934; }
 .notice a { display: inline-block; margin-top: 3px; }
@@ -119,6 +119,8 @@ button.tab:hover { background: #eaf0e4; }
 .review-panel dt { color: #586d50; font-size: 11px; }
 .review-panel dd { margin: 3px 0 0; font-weight: 600; }
 .review-panel p { font-size: 13px; color: #526b49; }
+.handover-person { min-width: 145px; }
+.handover-person .cell-subtitle { font-weight: 400; }
 .button-row { display: flex; gap: 12px; }
 .auth-page { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; background: #fbfcf8; }
 .auth-intro { padding: 45px 60px; background: var(--nav); color: #edf4e8; display: flex; flex-direction: column; justify-content: space-between; min-height: 100vh; }

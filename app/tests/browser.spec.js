@@ -107,6 +107,53 @@ test('employee sees only their records and cannot open admin pages or other prof
   expect(errors).toEqual([]);
 });
 
+test('HR to frontend handover displays both roles and updates notice status', async ({ page }) => {
+  const errors = observeErrors(page);
+  await login(page, process.env.WMS_TEST_ADMIN || 'ravi.shankar');
+  const options = await (await page.request.get('/api/options')).json();
+  const name = `Browser HR ${Date.now()}`;
+  const employeeResponse = await page.request.post('/api/employees', { data: {
+    name, email: `${name.replaceAll(' ', '-')}@example.test`, date_of_joining: '2020-01-01', dept_id: 3, designation: 'HR Executive',
+  } });
+  expect(employeeResponse.status()).toBe(201);
+  const { emp_id } = await employeeResponse.json();
+  const taskResponse = await page.request.post('/api/tasks', { data: {
+    project_id: 1, assigned_to: emp_id, title: `Handover from ${name}`,
+  } });
+  expect(taskResponse.status()).toBe(201);
+  const { task_id } = await taskResponse.json();
+  try {
+    await page.goto('/handover');
+    await expect(page.getByLabel(/^Resignation date/)).toHaveValue(options.today);
+    await expect(page.getByLabel(/^Last working day/)).toHaveValue(options.today);
+    await page.getByLabel(/^Departing employee/).selectOption(String(emp_id));
+    await page.getByLabel(/^Handover to/).selectOption('4');
+    await page.getByRole('button', { name: /Review handover/ }).click();
+    const review = page.locator('.review-panel');
+    await expect(review).toContainText('Department: HR');
+    await expect(review).toContainText('HR Executive');
+    await expect(review).toContainText('Department: Engineering');
+    await expect(review).toContainText('Frontend Engineer');
+    await expect(review).toContainText('React (expert)');
+    await page.getByRole('button', { name: 'Confirm handover' }).click();
+
+    const row = page.getByRole('row').filter({ has: page.getByRole('link', { name, exact: true }) });
+    await expect(row.getByRole('cell').nth(0)).toContainText('Department: HR');
+    await expect(row.getByRole('cell').nth(1)).toContainText('React (expert)');
+    await expect(row).toContainText('On notice');
+    const moved = await (await page.request.get(`/api/tasks/${task_id}`)).json();
+    expect(moved.assigned_to).toBe(4);
+    await row.getByRole('link', { name, exact: true }).click();
+    await expect(page.locator('.profile-overview .pill')).toHaveText('On notice');
+    await expect(page.getByRole('link', { name: /Start a handover/ })).toHaveCount(0);
+    await page.goto('/dashboard');
+    await expect(page.getByRole('row').filter({ hasText: name })).toContainText('On notice');
+  } finally {
+    await page.request.delete(`/api/tasks/${task_id}`);
+  }
+  expect(errors).toEqual([]);
+});
+
 test('mobile login and authenticated workspace fit without horizontal overflow', async ({ page }) => {
   const errors = observeErrors(page);
   await page.setViewportSize({ width: 390, height: 844 });
@@ -159,7 +206,8 @@ test('editing historical assignees, managers and department heads preserves thei
   const report = await create('employees', { name: `Browser retention report ${suffix}`, email: `report-${suffix}@example.test`, date_of_joining: '2021-01-01', manager_id: head.emp_id });
   const departmentName = `Browser retention ${suffix}`;
   const department = await create('departments', { dept_name: departmentName, head_emp_id: head.emp_id });
-  const departureDate = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  const { today } = await (await page.request.get('/api/options')).json();
+  const departureDate = new Date(Date.parse(`${today}T00:00:00Z`) - 86400000).toISOString().slice(0, 10);
   const resignation = await page.request.post('/api/resignations', { data: { emp_id: head.emp_id, handover_to: 1, resignation_date: departureDate, last_working_day: departureDate, handover_notes: 'Browser regression: retain existing manager/head references.' } });
   expect(resignation.ok(), await resignation.text()).toBe(true);
   try {

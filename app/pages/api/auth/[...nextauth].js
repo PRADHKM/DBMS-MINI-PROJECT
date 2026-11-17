@@ -15,10 +15,8 @@ export const authOptions = {
         if (typeof credentials?.username !== 'string' || typeof credentials?.password !== 'string' || credentials.username.length > 50 || Buffer.byteLength(credentials.password, 'utf8') > 72) return null;
         const rows = await query(
           `SELECT u.user_id, u.emp_id, u.username, u.password_hash, u.role, e.name
-           FROM USER_ACCOUNT u JOIN EMPLOYEE e ON u.emp_id = e.emp_id
-           LEFT JOIN RESIGNATION r ON r.emp_id=e.emp_id
-           WHERE u.username = ? AND e.status='active'
-             AND (r.last_working_day IS NULL OR r.last_working_day >= CURDATE())`,
+           FROM USER_ACCOUNT u JOIN v_employee_effective_status e ON u.emp_id = e.emp_id
+           WHERE u.username = ? AND e.effective_status='active'`,
           [credentials.username.trim()]
         );
         const user = rows[0];

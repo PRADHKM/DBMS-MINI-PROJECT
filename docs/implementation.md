@@ -105,10 +105,11 @@ Secondary indexes beyond the automatic key indexes: `idx_worklog_emp_date`, `idx
 
 | View | What it shows | Why it exists |
 |---|---|---|
-| `v_employee_effective_status` | Employee plus resignation dates and an `effective_status` | Departure takes effect at read time: status is `resigned` once the last working day has passed, with no scheduled job needed |
+| `v_employee_effective_status` | Resignation dates, login eligibility (`effective_status`), and employment status (`active`, `notice_period`, or `resigned`) | Computes status when queried using MySQL's current date |
+| `v_employee_skills` | Each employee's recorded skills and proficiency levels | Supplies the skill lists for handover review and history |
 | `v_active_employee_workload` | Per active employee: open task count and total hours | Aggregates tasks and logs in separate sub-queries so hours are not multiplied by the number of tasks |
 | `v_project_progress` | Per project: total and completed tasks, percent complete | Dashboard-style roll-up with `NULLIF` guarding division by zero |
-| `v_resignation_handover` | Each resignation with successor, open task count and total hours contributed | The handover use case in one query |
+| `v_resignation_handover` | Each resignation's status and dates, both employees' departments, roles and skills, open task count and total hours contributed | Supplies the handover history and terminal report |
 
 ### 4.5 Function and procedures (`05_procedures_functions.sql`)
 
@@ -307,7 +308,7 @@ Editing a snapshot (admin) replaces text and embedding in one `UPDATE`, so they 
 
 Resulting behaviour:
 
-- **Notice period**: the employee stays active and can sign in until their last working day. Open tasks move immediately.
+- **Notice period** shows as **On notice** in the app and terminal report. The employee can sign in through their last working day, and open tasks move immediately.
 - **After the last working day**: they are effectively resigned (computed at read time), cannot sign in, and existing sessions are rejected on the next request.
 - **History** is untouched: completed tasks and all work logs keep the original author.
 - Anyone with a recorded resignation cannot receive new tasks or act as a successor.
@@ -372,10 +373,11 @@ Logs are inserted while tasks are in progress, then finished tasks are marked co
 
 | Command | Does |
 |---|---|
-| `setup` | Starts Compose, creates `app/.env.local` with a random secret, installs dependencies, builds, starts the app and waits for it |
+| `setup` | Starts Compose, refreshes the MySQL views, creates `app/.env.local` if needed, installs dependencies, builds and starts the app |
 | `populate` | Loads `09_demo_extra.sql`, then generates or refreshes a summary and embedding for every employee |
 | `search ["question"]` | One similarity search, or with no argument a showcase of 7 preset questions |
 | `sql` | Runs the SQL walkthrough: row counts, views, function and procedure, a constraint rejection, the DML demo, advanced queries, the pgvector schema and CRUD demo |
+| `handover` | Shows current resignation status, dates, departments and skills. Run `npm run handover` from `app/` to use the app's MySQL connection settings |
 | `rbac` | Runs the role tests, then live statements as the employee-role account showing allowed and denied results |
 | `api` | Live API walkthrough |
 | `test` | All automated suites |

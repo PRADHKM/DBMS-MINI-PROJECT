@@ -5,6 +5,7 @@
 #   scripts/demo.sh populate load extra demo data (09_demo_extra.sql) + build a summary/embedding per employee
 #   scripts/demo.sh search "question"   similarity search; no question runs the preset showcase
 #   scripts/demo.sh sql      MySQL views/functions/procedures/DML/advanced queries + pgvector CRUD
+#   scripts/demo.sh handover list current handover status, both departments and both skill sets
 #   scripts/demo.sh api      live API walk-through (auth, summary, search, vector RUD, handover)
 #   scripts/demo.sh rbac     database-level role checks (wms_admin_role / wms_employee_role)
 #   scripts/demo.sh test     npm test, DB tests, HTTP tests (needs app running)
@@ -44,6 +45,9 @@ cmd_setup() {
   say "1/4 Databases (Docker Compose)"
   command -v docker >/dev/null || die "docker not found"
   docker compose up -d --wait
+  # The MySQL image only runs init files on a new volume. Refresh these views
+  # on existing volumes too; CREATE OR REPLACE leaves all table data intact.
+  docker compose exec -T mysql sh -c 'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mysql -uroot < /docker-entrypoint-initdb.d/04_views.sql'
 
   say "2/4 Application config"
   if [ ! -f "$APP/.env.local" ]; then
@@ -90,6 +94,17 @@ cmd_search() {
   fi
 }
 
+cmd_handover() {
+  say "MySQL: handover history"
+  mysql_run <<'SQL'
+SELECT CURDATE() AS database_date, @@session.time_zone AS database_time_zone;
+SELECT resigning_employee, employment_status, resignation_date, last_working_day,
+       employee_department, designation, employee_skills,
+       handover_to, successor_department, successor_designation, successor_skills
+FROM v_resignation_handover ORDER BY resignation_date DESC, resignation_id DESC;
+SQL
+}
+
 cmd_sql() {
   say "MySQL: tables and row counts"
   mysql_run <<'SQL'
@@ -102,8 +117,9 @@ SQL
   mysql_run <<'SQL'
 SELECT * FROM v_active_employee_workload LIMIT 6;
 SELECT * FROM v_project_progress;
-SELECT * FROM v_resignation_handover LIMIT 5;
 SQL
+
+  cmd_handover
 
   say "MySQL: function and stored procedure"
   mysql_run <<'SQL'
@@ -191,6 +207,7 @@ case "${1:-all}" in
   populate) cmd_populate ;;
   search) shift; cmd_search "$@" ;;
   sql)    cmd_sql ;;
+  handover) cmd_handover ;;
   api)    cmd_api ;;
   rbac)   cmd_rbac ;;
   test)   cmd_test ;;

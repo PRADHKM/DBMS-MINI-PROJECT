@@ -51,7 +51,7 @@ async function search(question) {
   console.log(`\n\x1b[1;36mQ: ${question}\x1b[0m  (model ${embedding_model})`);
   if (!results.length) console.log('   no summaries stored - run: scripts/demo.sh populate');
   results.forEach((r, i) => console.log(
-    `  ${i + 1}. ${String(r.employee.name).padEnd(18)} ${r.employee.status.padEnd(9)} ` +
+    `  ${i + 1}. ${String(r.employee.name).padEnd(18)} ${r.employee.status.replaceAll('_', ' ').padEnd(13)} ` +
     `similarity ${Number(r.similarity).toFixed(3)}${r.stale ? ' (stale)' : ''}\n     ${clip(r.summary_text, 150)}`));
   return results;
 }

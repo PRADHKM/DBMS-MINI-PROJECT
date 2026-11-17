@@ -7,13 +7,13 @@ export default apiHandler(async (req, res) => {
   if (req.method === 'GET') {
     const session = await requireSession(req, res); if (!session) return;
     let sql = `SELECT e.emp_id,e.name,e.designation,e.dept_id,e.manager_id,e.email,e.phone,e.date_of_joining,
-      CASE WHEN r.last_working_day<CURDATE() THEN 'resigned' ELSE e.status END AS status,
-      r.last_working_day,d.dept_name FROM EMPLOYEE e
-      LEFT JOIN DEPARTMENT d ON d.dept_id=e.dept_id LEFT JOIN RESIGNATION r ON r.emp_id=e.emp_id WHERE 1=1`;
+      e.employment_status AS status,e.resignation_date,
+      e.last_working_day,d.dept_name FROM v_employee_effective_status e
+      LEFT JOIN DEPARTMENT d ON d.dept_id=e.dept_id WHERE 1=1`;
     const params = [];
     if (session.user.role !== 'admin') { sql += ' AND e.emp_id=?'; params.push(session.user.empId); }
     if (req.query.dept) { sql += ' AND e.dept_id=?'; params.push(optionalId(req.query.dept, 'dept')); }
-    if (req.query.status) { sql += ` AND (CASE WHEN r.last_working_day<CURDATE() THEN 'resigned' ELSE e.status END)=?`; params.push(enumValue(req.query.status, 'status', ['active','resigned'])); }
+    if (req.query.status) { sql += ' AND e.employment_status=?'; params.push(enumValue(req.query.status, 'status', ['active','notice_period','resigned'])); }
     if (req.query.search) { sql += ' AND e.name LIKE ?'; params.push(`%${text(req.query.search, 'search', {max:100})}%`); }
     return res.status(200).json(await query(sql + ' ORDER BY e.name', params));
   }

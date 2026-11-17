@@ -7,8 +7,8 @@ import assert from 'node:assert/strict';
 // can be inspected. It never changes the supplied seed employees or their work.
 const base = (process.env.WMS_TEST_URL || 'http://127.0.0.1:3000').replace(/\/$/, '');
 const prefix = 'http_' + Date.now().toString(36);
-const shiftedDay = (offset) => new Date(Date.now() + offset * 86400000).toISOString().slice(0, 10);
-const today = shiftedDay(0), yesterday = shiftedDay(-1), joined = shiftedDay(-30);
+let today, yesterday, joined;
+const shiftedDay = (offset) => new Date(Date.parse(`${today}T00:00:00Z`) + offset * 86400000).toISOString().slice(0, 10);
 const password = 'WorkerTest!2026';
 
 class Client {
@@ -70,6 +70,8 @@ test('HTTP workflow against isolated seeded databases', { timeout: 180000 }, asy
     await seededEmployee.request('/api/resignations', {}, 403);
     await seededEmployee.request('/api/search/semantic', { method: 'POST', body: { question: 'work history' } }, 403);
     const options = await seededEmployee.request('/api/options');
+    assert.match(options.today, /^\d{4}-\d{2}-\d{2}$/);
+    today = options.today; yesterday = shiftedDay(-1); joined = shiftedDay(-30);
     assert.equal(options.employees.length, 1); assert.equal(options.employees[0].emp_id, 2);
     assert.ok(options.tasks.every((entry) => entry.assigned_to === 2));
     await admin.request('/api/employees/1%20OR%201=1', {}, 400);
@@ -209,7 +211,19 @@ test('HTTP workflow against isolated seeded databases', { timeout: 180000 }, asy
     assert.equal((await admin.request('/api/tasks/' + task)).assigned_to, beta);
     assert.equal((await admin.request('/api/tasks/' + completedTask)).assigned_to, alpha, 'completed task history remains with the departing employee');
     assert.equal((await admin.request('/api/worklogs/' + log)).emp_id, alpha);
-    assert.equal((await admin.request('/api/employees/' + alpha)).employee.status, 'active', 'notice period retains login until the last working day');
+    const { employee: departing } = await admin.request('/api/employees/' + alpha);
+    assert.equal(departing.effective_status, 'active', 'notice period retains login until the last working day');
+    assert.equal(departing.status, 'notice_period');
+    assert.equal((await admin.request('/api/employees?status=notice_period')).find(entry => entry.emp_id === alpha).status, 'notice_period');
+    assert.ok(!(await admin.request('/api/employees?status=active')).some(entry => entry.emp_id === alpha));
+    const history = await admin.request('/api/resignations');
+    const notice = history.find(entry => entry.emp_id === alpha);
+    assert.equal(notice.status, 'notice_period');
+    assert.equal(notice.resignation_date, today);
+    assert.equal(notice.last_working_day, shiftedDay(7));
+    const seeded = history.find(entry => entry.emp_id === 5);
+    assert.ok(seeded.employee_skills.some(skill => skill.name === 'Kubernetes'));
+    assert.ok(seeded.successor_skills.some(skill => skill.name === 'Node.js'));
     assert.equal((await alphaClient.request('/api/employees/' + alpha + '/summary')).stale, true, 'handover invalidates the departing employee task snapshot');
     assert.ok(!(await admin.request('/api/options')).employees.some((entry) => entry.emp_id === alpha), 'a person on notice cannot receive new assignments');
     await admin.request('/api/tasks', { method: 'POST', body: { project_id: project, assigned_to: alpha, title: prefix + ' invalid assignment' } }, 400);
@@ -236,6 +250,7 @@ test('HTTP workflow against isolated seeded databases', { timeout: 180000 }, asy
     await departedClient.expectPageRedirect('/worklogs', '/login');
     await (new Client()).login(prefix + '_departed', password, 401);
     assert.equal((await admin.request('/api/employees/' + departed)).employee.status, 'resigned');
+    assert.equal((await admin.request('/api/resignations')).find(entry => entry.emp_id === departed).status, 'resigned');
     await admin.request('/api/departments/' + department, { method: 'PUT', body: { dept_name: prefix + ' after departure', head_emp_id: departed } });
     assert.equal((await admin.request('/api/departments/' + department)).head_emp_id, departed, 'renaming preserves the unchanged historical department head');
     await admin.request('/api/departments/' + department, { method: 'PUT', body: { head_emp_id: alpha } }, 400);

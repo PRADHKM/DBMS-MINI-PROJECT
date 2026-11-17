@@ -8,9 +8,17 @@ USE workload_management_system;
 CREATE OR REPLACE VIEW v_employee_effective_status AS
 SELECT e.*, r.resignation_date, r.last_working_day,
        CASE WHEN e.status = 'resigned' OR r.last_working_day < CURDATE()
-            THEN 'resigned' ELSE 'active' END AS effective_status
+            THEN 'resigned' ELSE 'active' END AS effective_status,
+       CASE WHEN e.status = 'resigned' OR r.last_working_day < CURDATE() THEN 'resigned'
+            WHEN r.emp_id IS NOT NULL THEN 'notice_period'
+            ELSE 'active' END AS employment_status
 FROM EMPLOYEE e
 LEFT JOIN RESIGNATION r ON r.emp_id = e.emp_id;
+
+CREATE OR REPLACE VIEW v_employee_skills AS
+SELECT es.emp_id, JSON_ARRAYAGG(JSON_OBJECT('name', s.skill_name, 'proficiency', es.proficiency)) AS skills
+FROM EMPLOYEE_SKILL es JOIN SKILL s ON s.skill_id = es.skill_id
+GROUP BY es.emp_id;
 
 -- View 1: active employee workload summary (for dashboard)
 -- Aggregate each child table independently to avoid multiplying hours by the
@@ -29,7 +37,7 @@ LEFT JOIN (SELECT assigned_to, COUNT(*) AS active_tasks FROM TASK
            WHERE status <> 'completed' GROUP BY assigned_to) t ON t.assigned_to = e.emp_id
 LEFT JOIN (SELECT emp_id, SUM(hours_spent) AS total_hours_logged FROM WORK_LOG
            GROUP BY emp_id) w ON w.emp_id = e.emp_id
-WHERE e.effective_status = 'active';
+WHERE e.employment_status = 'active';
 
 -- View 2: project progress overview
 CREATE OR REPLACE VIEW v_project_progress AS
@@ -57,10 +65,21 @@ SELECT
     h.name                       AS handover_to,
     r.handover_notes,
     (SELECT COUNT(*) FROM TASK t WHERE t.assigned_to = e.emp_id AND t.status != 'completed') AS open_tasks,
-    (SELECT COALESCE(SUM(w.hours_spent), 0) FROM WORK_LOG w WHERE w.emp_id = e.emp_id)        AS total_hours_contributed
+    (SELECT COALESCE(SUM(w.hours_spent), 0) FROM WORK_LOG w WHERE w.emp_id = e.emp_id)        AS total_hours_contributed,
+    e.employment_status,
+    d.dept_name AS employee_department,
+    COALESCE(es.skills, JSON_ARRAY()) AS employee_skills,
+    h.emp_id AS successor_emp_id,
+    h.designation AS successor_designation,
+    hd.dept_name AS successor_department,
+    COALESCE(hs.skills, JSON_ARRAY()) AS successor_skills
 FROM RESIGNATION r
-JOIN EMPLOYEE e ON r.emp_id = e.emp_id
-LEFT JOIN EMPLOYEE h ON r.handover_to = h.emp_id;
+JOIN v_employee_effective_status e ON r.emp_id = e.emp_id
+LEFT JOIN DEPARTMENT d ON e.dept_id = d.dept_id
+LEFT JOIN v_employee_skills es ON es.emp_id = e.emp_id
+LEFT JOIN EMPLOYEE h ON r.handover_to = h.emp_id
+LEFT JOIN DEPARTMENT hd ON h.dept_id = hd.dept_id
+LEFT JOIN v_employee_skills hs ON hs.emp_id = h.emp_id;
 
 -- Usage:
 -- SELECT * FROM v_active_employee_workload ORDER BY total_hours_logged DESC;

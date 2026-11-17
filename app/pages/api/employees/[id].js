@@ -6,12 +6,12 @@ export default apiHandler(async (req, res) => {
   const session = await requireSession(req,res); if (!session) return;
   const id = parseId(req.query.id);
   if (!canAccessEmployee(session.user,id)) fail(403,'You can only access your own profile');
-  const employee = (await query(`SELECT e.*,d.dept_name,m.name AS manager_name,r.last_working_day,r.handover_to,r.handover_notes,
-    CASE WHEN r.last_working_day<CURDATE() THEN 'resigned' ELSE e.status END AS effective_status
-    FROM EMPLOYEE e LEFT JOIN DEPARTMENT d ON d.dept_id=e.dept_id
+  const employee = (await query(`SELECT e.*,d.dept_name,m.name AS manager_name,r.handover_to,r.handover_notes
+    FROM v_employee_effective_status e LEFT JOIN DEPARTMENT d ON d.dept_id=e.dept_id
     LEFT JOIN EMPLOYEE m ON m.emp_id=e.manager_id LEFT JOIN RESIGNATION r ON r.emp_id=e.emp_id WHERE e.emp_id=?`, [id]))[0];
   if (!employee) fail(404,'Employee not found');
-  employee.status = employee.effective_status;
+  employee.status = employee.employment_status;
+  delete employee.employment_status;
   if (req.method === 'GET') {
     const tasks = await query(`SELECT t.*,p.project_name FROM TASK t JOIN PROJECT p ON p.project_id=t.project_id WHERE t.assigned_to=? ORDER BY t.status,t.due_date`,[id]);
     const worklog = await query(`SELECT w.*,t.title AS task_title,p.project_name FROM WORK_LOG w JOIN TASK t ON t.task_id=w.task_id JOIN PROJECT p ON p.project_id=t.project_id WHERE w.emp_id=? ORDER BY w.log_date DESC,w.log_id DESC`,[id]);

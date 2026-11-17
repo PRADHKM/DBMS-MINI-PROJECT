@@ -22,6 +22,7 @@ async function main() {
   const token = randomUUID().replaceAll('-', '').slice(0, 14);
   const employeeIds = [];
   let projectId;
+  let skillId;
   let faultTrigger;
   let passed = 0;
   let skipped = 0;
@@ -72,6 +73,12 @@ async function main() {
     const past = await employee('past');
     const today = await employee('today');
     const rollback = await employee('rollback');
+    const hrSkill = `Interviewing ${token}`;
+    skillId = (await q('INSERT INTO SKILL (skill_name) VALUES (?)', [hrSkill])).insertId;
+    await q("UPDATE EMPLOYEE SET dept_id=3,designation='HR Executive' WHERE emp_id=?", [departing]);
+    await q("UPDATE EMPLOYEE SET dept_id=1,designation='Frontend Engineer' WHERE emp_id=?", [receiver]);
+    await q("INSERT INTO EMPLOYEE_SKILL (emp_id,skill_id,proficiency) VALUES (?,?,'expert'),(?,2,'advanced')",
+      [departing, skillId, receiver]);
     const openTask = await task(departing, 'open');
     const completedTask = await task(departing, 'complete', 'completed');
     const invalidTask = await task(invalid, 'invalid');
@@ -96,6 +103,15 @@ async function main() {
       assert.equal(await scalar('SELECT assigned_to FROM TASK WHERE task_id=?', [completedTask]), departing);
       assert.equal(await scalar('SELECT emp_id FROM WORK_LOG WHERE log_id=?', [logId]), departing);
       assert.equal(await scalar('SELECT effective_status FROM v_employee_effective_status WHERE emp_id=?', [departing]), 'active');
+      const [report] = await q('SELECT * FROM v_resignation_handover WHERE emp_id=?', [departing]);
+      assert.equal(report.employment_status, 'notice_period');
+      assert.equal(await scalar('SELECT COUNT(*) FROM v_active_employee_workload WHERE emp_id=?', [departing]), 0);
+      assert.equal(report.employee_department, 'HR');
+      assert.equal(report.designation, 'HR Executive');
+      assert.deepEqual(report.employee_skills, [{ name: hrSkill, proficiency: 'expert' }]);
+      assert.equal(report.successor_department, 'Engineering');
+      assert.equal(report.successor_designation, 'Frontend Engineer');
+      assert.deepEqual(report.successor_skills, [{ name: 'React', proficiency: 'advanced' }]);
       await q('UPDATE WORK_LOG SET notes=?,hours_spent=3 WHERE log_id=?', ['Historical correction', logId]);
       assert.equal(await scalar('SELECT emp_id FROM WORK_LOG WHERE log_id=?', [logId]), departing);
       await reject('CALL sp_process_resignation(?,CURDATE(),CURDATE(),NULL,?)', [departing, receiver]);
@@ -106,12 +122,18 @@ async function main() {
     await test('last working day and automatic read-time expiry', async () => {
       await q('CALL sp_process_resignation(?,CURDATE(),CURDATE(),NULL,NULL)', [today]);
       assert.equal(await scalar('SELECT effective_status FROM v_employee_effective_status WHERE emp_id=?', [today]), 'active');
+      assert.equal(await scalar('SELECT employment_status FROM v_resignation_handover WHERE emp_id=?', [today]), 'notice_period');
       await q(`CALL sp_process_resignation(?,DATE_SUB(CURDATE(),INTERVAL 2 DAY),
         DATE_SUB(CURDATE(),INTERVAL 1 DAY),NULL,NULL)`, [past]);
       assert.equal(await scalar('SELECT status FROM EMPLOYEE WHERE emp_id=?', [past]), 'resigned');
-      await q('UPDATE RESIGNATION SET last_working_day=DATE_SUB(CURDATE(),INTERVAL 1 DAY) WHERE emp_id=?', [departing]);
-      assert.equal(await scalar('SELECT status FROM EMPLOYEE WHERE emp_id=?', [departing]), 'active');
-      assert.equal(await scalar('SELECT effective_status FROM v_employee_effective_status WHERE emp_id=?', [departing]), 'resigned');
+      // Advance this connection's clock past midnight without rewriting the resignation.
+      const tomorrow = await scalar('SELECT UNIX_TIMESTAMP(CURDATE() + INTERVAL 1 DAY)');
+      await q('SET timestamp = ?', [tomorrow]);
+      try {
+        assert.equal(await scalar('SELECT status FROM EMPLOYEE WHERE emp_id=?', [today]), 'active');
+        assert.equal(await scalar('SELECT effective_status FROM v_employee_effective_status WHERE emp_id=?', [today]), 'resigned');
+        assert.equal(await scalar('SELECT employment_status FROM v_resignation_handover WHERE emp_id=?', [today]), 'resigned');
+      } finally { await q('SET timestamp = 0'); }
       await reject('CALL sp_process_resignation(?,CURDATE(),CURDATE(),NULL,?)', [invalid, past]);
     });
     await test('mid-handover error rolls back resignation status and task ownership', async () => {
@@ -136,7 +158,7 @@ async function main() {
     });
     await test('task completion timestamps and work-log integrity', async () => {
       await q('UPDATE TASK SET status=\'completed\' WHERE task_id=?', [invalidTask]);
-      assert.ok(await scalar('SELECT completion_date FROM TASK WHERE task_id=?', [invalidTask]));
+      assert.equal(await scalar('SELECT completion_date FROM TASK WHERE task_id=?', [invalidTask]), await scalar('SELECT CURDATE()'));
       await reject('INSERT INTO WORK_LOG (task_id,emp_id,log_date,hours_spent) VALUES (?,?,CURDATE(),1)', [invalidTask, invalid]);
       await q('UPDATE TASK SET status=\'in_progress\' WHERE task_id=?', [invalidTask]);
       assert.equal(await scalar('SELECT completion_date FROM TASK WHERE task_id=?', [invalidTask]), null);
@@ -149,6 +171,7 @@ async function main() {
       if (faultTrigger) await q(`DROP TRIGGER IF EXISTS ${faultTrigger}`);
       if (projectId) await q('DELETE FROM PROJECT WHERE project_id=?', [projectId]);
       for (const id of employeeIds) await q('DELETE FROM EMPLOYEE WHERE emp_id=?', [id]);
+      if (skillId) await q('DELETE FROM SKILL WHERE skill_id=?', [skillId]);
     } finally { await connection.end(); }
   }
 }

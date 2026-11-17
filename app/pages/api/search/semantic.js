@@ -13,7 +13,7 @@ export default apiHandler(async (req, res) => {
   const matches = await searchSimilarSummaries(await embedText(question), 5);
   const ids = matches.map((m) => m.emp_id);
   const employees = ids.length ? await query(
-    `SELECT emp_id, name, designation, effective_status AS status
+    `SELECT emp_id, name, designation, employment_status AS status
      FROM v_employee_effective_status WHERE emp_id IN (${ids.map(() => '?').join(',')})`, ids
   ) : [];
   const byId = new Map(employees.map((e) => [e.emp_id, e]));

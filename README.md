@@ -74,7 +74,17 @@ The employee profile page shows the history with **Edit** and **Delete** for adm
 
 ## Handover rules
 
-Resignation notice and departure are different dates. Recording notice transfers open tasks immediately, preserves completed tasks and historical log authors, and retains the employee's active access through their last working day. Effective status and login eligibility become resigned after that date without a scheduled job. Employees with any recorded resignation cannot receive new assignments or act as a new successor.
+Resignation notice and departure are different dates. Recording notice transfers open tasks immediately and preserves completed tasks and historical log authors. The app and handover report show **On notice** through the last working day, when the employee can still sign in. Starting the following day in MySQL's time zone, they show **Resigned** and can no longer sign in. Employees with a recorded resignation cannot receive new assignments or act as a new successor. The handover shows the department, designation and recorded skills for both people. Those skill records remain with their respective employees.
+
+Run `npm run handover` from the `app` directory to see current statuses, dates, departments and skills from the same MySQL database as the app. With Docker Compose you can also run `scripts/demo.sh handover`. In any MySQL client, use the reporting views:
+
+```sql
+SELECT name, employment_status, resignation_date, last_working_day
+FROM v_employee_effective_status ORDER BY name;
+SELECT * FROM v_resignation_handover ORDER BY resignation_date DESC, resignation_id DESC;
+```
+
+The views calculate status when queried; `EMPLOYEE.status` alone does not show notice or date-based expiry. For an existing Docker database, stop the running app before running `scripts/demo.sh setup`, which refreshes the views without removing data. For an existing native MySQL database, run `SOURCE database/mysql/04_views.sql;` as a schema administrator from the repository directory, then restart the rebuilt app.
 
 The stored procedure validates employee existence, notice dates, joining date, successor eligibility, duplicate resignation and self-handover. It locks employees consistently, then inserts the resignation, updates status and transfers tasks in one transaction. A failed step rolls the whole operation back. The UI links to the departing employee's profile to generate the handover summary; summary generation is an explicit separate action so an external provider failure cannot leave a partially processed resignation.
 

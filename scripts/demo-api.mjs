@@ -3,7 +3,6 @@
 // can be repeated; the handover record is intentionally retained as audit history.
 const base = (process.env.WMS_URL || 'http://localhost:3000').replace(/\/$/, '');
 const stamp = Date.now().toString(36);
-const day = (n) => new Date(Date.now() + n * 86400000).toISOString().slice(0, 10);
 
 class Client {
   cookies = new Map();
@@ -41,6 +40,10 @@ const expect = (label, res, ...ok) => {
   return res.data;
 };
 const clip = (s, n = 160) => (s.length > n ? s.slice(0, n) + '…' : s);
+const check = (label, pass) => {
+  if (!pass) failures++;
+  show(pass ? 'PASS' : 'FAIL', label);
+};
 
 const admin = new Client(), employee = new Client(), anon = new Client();
 
@@ -85,21 +88,36 @@ if (summary) {
 }
 
 step('5. Resignation handover (atomic task transfer)');
-const emp = expect('create demo employee', await admin.call('/api/employees', { method: 'POST', body: {
-  name: `Demo Leaver ${stamp}`, email: `demo.leaver.${stamp}@example.test`, designation: 'Backend Engineer',
-  dept_id: 1, date_of_joining: day(-60) } }), 201);
-if (emp) {
+const options = expect('read database date and handover options', await admin.call('/api/options'), 200);
+const today = options?.today;
+const hrDepartment = options?.departments?.find(d => d.dept_name === 'HR');
+check('database date and HR department are available', Boolean(today && hrDepartment));
+const day = (n) => new Date(Date.parse(`${today}T00:00:00Z`) + n * 86400000).toISOString().slice(0, 10);
+const emp = today && hrDepartment && expect('create demo employee', await admin.call('/api/employees', { method: 'POST', body: {
+  name: `Demo Leaver ${stamp}`, email: `demo.leaver.${stamp}@example.test`, designation: 'HR Executive',
+  dept_id: hrDepartment.dept_id, date_of_joining: day(-60) } }), 201);
+if (emp?.emp_id) {
   const task = expect('assign an open task to them', await admin.call('/api/tasks', { method: 'POST', body: {
     project_id: 1, assigned_to: emp.emp_id, title: `Demo handover task ${stamp}`, status: 'in_progress', priority: 'high',
     start_date: day(-5), due_date: day(10) } }), 201);
   expect('self-handover is rejected', await admin.call('/api/resignations', { method: 'POST', body: {
     emp_id: emp.emp_id, resignation_date: day(0), last_working_day: day(14), handover_notes: 'self', handover_to: emp.emp_id } }), 400);
-  expect('record resignation, hand over to Ananya (emp 2)', await admin.call('/api/resignations', { method: 'POST', body: {
+  expect('record resignation, hand over to Divya (Frontend Engineer)', await admin.call('/api/resignations', { method: 'POST', body: {
     emp_id: emp.emp_id, resignation_date: day(0), last_working_day: day(14),
-    handover_notes: 'Demo handover: payment service tasks move to Ananya.', handover_to: 2 } }), 201);
-  if (task) {
+    handover_notes: 'Demo handover: Divya takes over the open task.', handover_to: 4 } }), 201);
+  const rows = expect('read back recorded handover', await admin.call('/api/resignations'), 200);
+  const row = Array.isArray(rows) && rows.find(r => r.emp_id === emp.emp_id);
+  check('employee is on notice and both departments are shown', row?.status === 'notice_period'
+    && row.employee_department === 'HR' && row.successor_department === 'Engineering');
+  if (row) {
+    const skills = (values) => values?.map(s => `${s.name} (${s.proficiency})`).join(', ') || 'none recorded';
+    show('status and dates', `${row.status}: notice ${row.resignation_date}, last day ${row.last_working_day}`);
+    show('departing employee', `${row.employee_name}, ${row.employee_department} — ${row.employee_designation}; skills: ${skills(row.employee_skills)}`);
+    show('successor', `${row.handover_name}, ${row.successor_department} — ${row.successor_designation}; skills: ${skills(row.successor_skills)}`);
+  }
+  if (task?.task_id) {
     const moved = expect('task now belongs to successor', await admin.call(`/api/tasks/${task.task_id}`), 200);
-    show('assigned_to (expect 2)', moved?.assigned_to);
+    check('task assigned to Divya (emp 4)', moved?.assigned_to === 4);
   }
   expect('they cannot be handed new work during notice', await admin.call('/api/tasks', { method: 'POST', body: {
     project_id: 1, assigned_to: emp.emp_id, title: 'should fail', status: 'not_started' } }), 400, 409);

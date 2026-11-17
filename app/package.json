@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "handover": "node --env-file=.env.local scripts/handover-report.mjs",
     "test": "node --test tests/*.test.mjs",
     "test:db": "node --env-file=.env.local ../database/tests/mysql-integration.cjs",
     "test:rbac": "node ../database/tests/rbac.cjs",

@@ -25,7 +25,6 @@ export default apiHandler(async(req,res)=>{
   await requireRecord('PROJECT','project_id',values.project_id);
   await requireAvailableEmployee(values.assigned_to);
   dateOrder(values.start_date,values.due_date,'start_date','due_date');
-  if(values.status==='completed')values.completion_date=new Date().toISOString().slice(0,10);
   const id=await insertRecord('TASK',values);
   return res.status(201).json({task_id:id});
 },['GET','POST']);

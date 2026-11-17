@@ -8,11 +8,9 @@ import { query } from './mysql';
 // an existing session as well as to a new credentials login.
 export async function getActiveAccount(empId) {
   if (!Number.isSafeInteger(Number(empId)) || Number(empId) <= 0) return null;
-  return (await query(`SELECT u.user_id, u.emp_id, u.role, e.name, e.status, r.last_working_day
-    FROM USER_ACCOUNT u JOIN EMPLOYEE e ON e.emp_id=u.emp_id
-    LEFT JOIN RESIGNATION r ON r.emp_id=e.emp_id
-    WHERE u.emp_id=? AND e.status='active'
-      AND (r.last_working_day IS NULL OR r.last_working_day >= CURDATE())`, [Number(empId)]))[0] || null;
+  return (await query(`SELECT u.user_id, u.emp_id, u.role, e.name, e.effective_status AS status, e.last_working_day
+    FROM USER_ACCOUNT u JOIN v_employee_effective_status e ON e.emp_id=u.emp_id
+    WHERE u.emp_id=? AND e.effective_status='active'`, [Number(empId)]))[0] || null;
 }
 
 export async function requireSession(req, res) {
