@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1578" height="1481" viewBox="0 0 1578 1481" font-family="Helvetica,Arial,sans-serif">
+<rect width="1578" height="1481" fill="#ffffff"/>
+<text x="60" y="123.0" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#000000" font-weight="bold">EMPLOYEE</text>
+<text x="60" y="349.0" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#000000" font-weight="bold">DEPARTMENT</text>
+<text x="60" y="484.0" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#000000" font-weight="bold">USER_ACCOUNT</text>
+<text x="60" y="593.0" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#000000" font-weight="bold">SKILL</text>
+<text x="60" y="702.0" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#000000" font-weight="bold">EMPLOYEE_SKILL</text>
+<text x="60" y="824.0" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#000000" font-weight="bold">PROJECT</text>
+<text x="60" y="946.0" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#000000" font-weight="bold">TASK</text>
+<text x="60" y="1081.0" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#000000" font-weight="bold">WORK_LOG</text>
+<text x="60" y="1203.0" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#000000" font-weight="bold">RESIGNATION</text>
+<text x="60" y="1365.0" font-size="17" text-anchor="start" dominant-baseline="middle" fill="#000000" font-weight="bold">ai_work_summaries</text>
+<text x="52" y="1331.0" font-size="13" text-anchor="start" dominant-baseline="middle" fill="#000000" font-weight="normal">PostgreSQL + pgvector (separate database). emp_id is a logical reference: no cross-database foreign key.</text>
+<text x="60" y="29.0" font-size="26" text-anchor="start" dominant-baseline="middle" fill="#000000" font-weight="bold">Workload Management System: Relational schema diagram</text>
+<text x="60" y="72.0" font-size="14" text-anchor="start" dominant-baseline="middle" fill="#000000" font-weight="normal">Underlined attribute = primary key. Each arrow runs from a foreign key to the primary key it references. Dashed arrow = logical reference to another database.</text>
+<polyline points="601.8,172.0 601.8,201 1154.6,201 1154.6,440 99.0,440 98.976,398.0" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="98.976,398.0 102.98171363172028,407.9977126534348 94.98171493784241,408.0022840812599" fill="#000"/>
+<polyline points="700.8,172.0 700.8,188 72.0,188 72.0,172.0" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="72.0,172.0 76.0,182.0 68.0,182.0" fill="#000"/>
+<polyline points="306.9,398.0 306.9,414 1178.6,414 1178.6,305 81.0,305 81.024,172.0" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="81.024,172.0 85.02219542362596,182.00072164168648 77.0221955538764,181.9992780326874" fill="#000"/>
+<polyline points="204.0,533.0 204.0,549 1274.6,549 1274.6,292 90.0,292 89.952,172.0" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="89.952,172.0 93.95599967968005,181.9983992001281 85.95600031967996,182.00159919987212" fill="#000"/>
+<polyline points="108.0,751.0 108.0,780 1298.6,780 1298.6,279 99.0,279 98.976,172.0" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="98.976,172.0 102.97824288997764,181.99910255221053 94.97824309121792,182.00089694468878" fill="#000"/>
+<polyline points="204.0,751.0 204.0,767 1202.6,767 1202.6,658 108.0,658 108.0,642.0" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="108.0,642.0 112.0,652.0 104.0,652.0" fill="#000"/>
+<polyline points="731.4000000000001,873.0 731.4000000000001,889 1322.6,889 1322.6,427 117.0,427 117.024,398.0" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="117.024,398.0 121.01572277096794,408.00330691920107 113.01572551056226,407.99668623181316" fill="#000"/>
+<polyline points="207.0,995.0 207.0,1024 1226.6,1024 1226.6,902 111.0,902 111.0,873.0" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="111.0,873.0 115.0,883.0 107.0,883.0" fill="#000"/>
+<polyline points="312.9,995.0 312.9,1011 1346.6,1011 1346.6,266 108.0,266 108.0,172.0" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="108.0,172.0 112.0,182.0 104.0,182.0" fill="#000"/>
+<polyline points="204.0,1130.0 204.0,1159 1250.6,1159 1250.6,1037 108.0,1037 108.0,995.0" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="108.0,995.0 112.0,1005.0 104.0,1005.0" fill="#000"/>
+<polyline points="300.0,1130.0 300.0,1146 1370.6,1146 1370.6,253 117.0,253 117.024,172.0" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="117.024,172.0 121.02103686158412,182.0011847461757 113.02103721275009,181.9988143759094" fill="#000"/>
+<polyline points="241.2,1252.0 241.2,1281 1394.6,1281 1394.6,240 126.0,240 126.048,172.0" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="126.048,172.0 130.04094018168976,182.00282103735978 122.04094217476862,181.99717397994314" fill="#000"/>
+<polyline points="774.9,1252.0 774.9,1268 1418.6,1268 1418.6,227 135.0,227 134.976,172.0" fill="none" stroke="#000" stroke-width="1.2"/>
+<polygon points="134.976,172.0 138.9803632551218,181.99825359355472 130.98036401677456,182.0017445023133" fill="#000"/>
+<polyline points="210.0,1414.0 210.0,1430 1518.6,1430 1518.6,214 144.0,214 144.0,172.0" fill="none" stroke="#000" stroke-width="1.2" stroke-dasharray="6 4"/>
+<polygon points="144.0,172.0 148.0,182.0 140.0,182.0" fill="#000"/>
+<rect x="40.0" y="1316.0" width="1438.6" height="132" fill="none" stroke="#000" stroke-width="1.2" stroke-dasharray="6 4"/>
+<text x="759.3" y="1382.0" font-size="13" text-anchor="middle" dominant-baseline="middle" font-weight="normal"></text>
+<rect x="60.0" y="136.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="108.0" y="154.0" font-size="14" text-anchor="middle" dominant-baseline="middle" text-decoration="underline" font-weight="normal">emp_id</text>
+<rect x="156.0" y="136.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="204.0" y="154.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">name</text>
+<rect x="252.0" y="136.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="300.0" y="154.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">email</text>
+<rect x="348.0" y="136.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="396.0" y="154.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">phone</text>
+<rect x="444.0" y="136.0" width="109.8" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="498.9" y="154.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">designation</text>
+<rect x="553.8" y="136.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="601.8" y="154.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">dept_id</text>
+<rect x="649.8" y="136.0" width="102.0" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="700.8" y="154.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">manager_id</text>
+<rect x="751.8" y="136.0" width="141.0" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="822.3" y="154.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">date_of_joining</text>
+<rect x="892.8" y="136.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="940.8" y="154.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">status</text>
+<rect x="60.0" y="362.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="108.0" y="380.0" font-size="14" text-anchor="middle" dominant-baseline="middle" text-decoration="underline" font-weight="normal">dept_id</text>
+<rect x="156.0" y="362.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="204.0" y="380.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">dept_name</text>
+<rect x="251.99999999999997" y="362.0" width="109.8" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="306.9" y="380.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">head_emp_id</text>
+<rect x="60.0" y="497.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="108.0" y="515.0" font-size="14" text-anchor="middle" dominant-baseline="middle" text-decoration="underline" font-weight="normal">user_id</text>
+<rect x="156.0" y="497.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="204.0" y="515.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">emp_id</text>
+<rect x="252.0" y="497.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="300.0" y="515.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">username</text>
+<rect x="348.0" y="497.0" width="125.39999999999999" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="410.7" y="515.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">password_hash</text>
+<rect x="473.4" y="497.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="521.4" y="515.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">role</text>
+<rect x="569.4" y="497.0" width="102.0" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="620.4" y="515.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">created_at</text>
+<rect x="60.0" y="606.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="108.0" y="624.0" font-size="14" text-anchor="middle" dominant-baseline="middle" text-decoration="underline" font-weight="normal">skill_id</text>
+<rect x="156.0" y="606.0" width="102.0" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="207.0" y="624.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">skill_name</text>
+<rect x="60.0" y="715.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="108.0" y="733.0" font-size="14" text-anchor="middle" dominant-baseline="middle" text-decoration="underline" font-weight="normal">emp_id</text>
+<rect x="156.0" y="715.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="204.0" y="733.0" font-size="14" text-anchor="middle" dominant-baseline="middle" text-decoration="underline" font-weight="normal">skill_id</text>
+<rect x="251.99999999999997" y="715.0" width="109.8" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="306.9" y="733.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">proficiency</text>
+<rect x="60.0" y="837.0" width="102.0" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="111.0" y="855.0" font-size="14" text-anchor="middle" dominant-baseline="middle" text-decoration="underline" font-weight="normal">project_id</text>
+<rect x="162.0" y="837.0" width="117.6" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="220.8" y="855.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">project_name</text>
+<rect x="279.6" y="837.0" width="109.8" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="334.5" y="855.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">description</text>
+<rect x="389.40000000000003" y="837.0" width="102.0" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="440.40000000000003" y="855.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">start_date</text>
+<rect x="491.4000000000001" y="837.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="539.4000000000001" y="855.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">end_date</text>
+<rect x="587.4000000000001" y="837.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="635.4000000000001" y="855.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">status</text>
+<rect x="683.4000000000001" y="837.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="731.4000000000001" y="855.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">dept_id</text>
+<rect x="60.0" y="959.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="108.0" y="977.0" font-size="14" text-anchor="middle" dominant-baseline="middle" text-decoration="underline" font-weight="normal">task_id</text>
+<rect x="156.0" y="959.0" width="102.0" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="207.0" y="977.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">project_id</text>
+<rect x="258.0" y="959.0" width="109.8" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="312.9" y="977.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">assigned_to</text>
+<rect x="367.8" y="959.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="415.8" y="977.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">title</text>
+<rect x="463.80000000000007" y="959.0" width="109.8" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="518.7" y="977.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">description</text>
+<rect x="573.6" y="959.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="621.6" y="977.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">priority</text>
+<rect x="669.6" y="959.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="717.6" y="977.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">status</text>
+<rect x="765.6" y="959.0" width="102.0" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="816.6" y="977.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">start_date</text>
+<rect x="867.6" y="959.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="915.6" y="977.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">due_date</text>
+<rect x="963.5999999999999" y="959.0" width="141.0" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="1034.1" y="977.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">completion_date</text>
+<rect x="60.0" y="1094.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="108.0" y="1112.0" font-size="14" text-anchor="middle" dominant-baseline="middle" text-decoration="underline" font-weight="normal">log_id</text>
+<rect x="156.0" y="1094.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="204.0" y="1112.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">task_id</text>
+<rect x="252.0" y="1094.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="300.0" y="1112.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">emp_id</text>
+<rect x="348.0" y="1094.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="396.0" y="1112.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">log_date</text>
+<rect x="444.0" y="1094.0" width="109.8" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="498.9" y="1112.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">hours_spent</text>
+<rect x="553.8" y="1094.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="601.8" y="1112.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">notes</text>
+<rect x="60.0" y="1216.0" width="133.2" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="126.6" y="1234.0" font-size="14" text-anchor="middle" dominant-baseline="middle" text-decoration="underline" font-weight="normal">resignation_id</text>
+<rect x="193.2" y="1216.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="241.2" y="1234.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">emp_id</text>
+<rect x="289.20000000000005" y="1216.0" width="148.8" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="363.6" y="1234.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">resignation_date</text>
+<rect x="438.0" y="1216.0" width="148.8" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="512.4" y="1234.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">last_working_day</text>
+<rect x="586.8" y="1216.0" width="133.2" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="653.4" y="1234.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">handover_notes</text>
+<rect x="720.0" y="1216.0" width="109.8" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="774.9" y="1234.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">handover_to</text>
+<rect x="60.0" y="1378.0" width="102.0" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="111.0" y="1396.0" font-size="14" text-anchor="middle" dominant-baseline="middle" text-decoration="underline" font-weight="normal">summary_id</text>
+<rect x="162.0" y="1378.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="210.0" y="1396.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">emp_id</text>
+<rect x="258.0" y="1378.0" width="117.6" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="316.8" y="1396.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">generated_on</text>
+<rect x="375.6" y="1378.0" width="117.6" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="434.40000000000003" y="1396.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">summary_text</text>
+<rect x="493.20000000000005" y="1378.0" width="133.2" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="559.8000000000001" y="1396.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">source_context</text>
+<rect x="626.4000000000001" y="1378.0" width="156.6" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="704.7" y="1396.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">generation_method</text>
+<rect x="783.0000000000001" y="1378.0" width="164.4" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="865.2000000000002" y="1396.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">source_fingerprint</text>
+<rect x="947.4000000000001" y="1378.0" width="141.0" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="1017.9000000000001" y="1396.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">embedding_model</text>
+<rect x="1088.4" y="1378.0" width="133.2" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="1155.0" y="1396.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">source_log_ids</text>
+<rect x="1221.6000000000001" y="1378.0" width="141.0" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="1292.1000000000001" y="1396.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">source_task_ids</text>
+<rect x="1362.6000000000001" y="1378.0" width="96" height="36" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="1410.6000000000001" y="1396.0" font-size="14" text-anchor="middle" dominant-baseline="middle" font-weight="normal">embedding</text>
+</svg>
