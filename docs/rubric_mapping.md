@@ -4,7 +4,7 @@ Reviewed against the supplied PES University DBMS Aug-Dec 2026 Level 3 assessmen
 
 | # | Component | Marks | Project evidence | Readiness |
 |---|---|---:|---|---|
-| 1 | ER diagram | 2 | `er_diagram_chen.svg` and `er_diagram_chen_details.svg`, with matching editable drawio files | Reviewed; use both sheets |
+| 1 | ER diagram | 2 | `er-diagram-chen-single-page.pdf` / `.png` | Reviewed; single-page Chen ER |
 | 2 | Relational schema, keys, relationships and constraints | 3 | `relational_schema.md`, `.svg` and `.drawio`; nine MySQL tables and a separated vector table | Reviewed against SQL |
 | 3 | SQL DDL with constraints | 4 | `database/mysql/01_schema.sql`; PK/FK, uniqueness, checks, indexes and triggers | Fresh imports verified |
 | 4 | NoSQL/vector database creation | 4 | `database/pgvector/01_setup.sql`; actual vector extension, metadata and HNSW index | Executed with PostgreSQL/pgvector; Compose still needs deployment check |

@@ -4,11 +4,11 @@
 relationship maps to a foreign key on the "many" side. PK = primary key,
 FK = foreign key.)
 
-The conceptual ER model has two synchronized editable/rendered sheets:
-`er_diagram_chen.drawio` / `.svg` and `er_diagram_chen_details.drawio` / `.svg`.
-`relational_schema.drawio` / `.svg` contains the complete physical schema,
-including the separate vector store and all thirteen MySQL foreign-key mappings.
-Repeated entity boxes in the Chen sheets denote the same entity, not extra tables.
+The conceptual ER model is `er-diagram-chen-single-page.pdf` / `.png`.
+The physical schema diagram is `relational_schema_textbook.drawio` (editable, with
+`.svg` and `.png` renders): textbook-style tables with every foreign-key arrow,
+including the separate vector store and the dashed logical reference to it.
+`relational-schema-single-page.pdf` / `.png` is a black-and-white single-page version.
 Every integer MySQL primary key is `AUTO_INCREMENT`. Empty constraint cells below
 mean the column is nullable; they do not mean the database omits foreign keys.
 
