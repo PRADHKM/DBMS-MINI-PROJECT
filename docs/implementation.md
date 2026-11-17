@@ -406,8 +406,9 @@ Last full results on this codebase: 17 unit, 11 HTTP, 4 concurrency, 6 browser, 
 | `README.md` | Setup, accounts, features, handover rules, vector routes, roles, verification commands |
 | `docs/demo.md` | 10-minute demonstration plan and viva prompts |
 | `docs/implementation.md` | This document |
-| `docs/relational_schema.md` / `.svg` / `.drawio` | Physical schema with keys, constraints and the separate vector table |
-| `docs/er_diagram_chen*.svg/.drawio` | Chen-notation ER model, a main sheet and a details sheet |
+| `docs/relational_schema.md` | Physical schema reference with keys, constraints and the separate vector table |
+| `docs/relational_schema_textbook.drawio` / `.svg` / `.png` | Editable textbook-style relational schema diagram with foreign-key arrows |
+| `docs/relational-schema-single-page.pdf/.png` | Black-and-white single-page relational schema |
 | `docs/er-diagram-chen-single-page.pdf/.png` | Single-page Chen ER diagram |
 | `docs/rubric_mapping.md` | Mapping of features to the marking scheme and remaining submission actions |
 | `docs/verification.md` | Dated record of checks that were executed and their limits |
