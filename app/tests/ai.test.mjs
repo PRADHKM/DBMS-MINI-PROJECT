@@ -15,6 +15,22 @@ test('summary is built from actual historical work records', () => {
   assert.match(summary.text, /Handover \(in progress\)/);
   assert.doesNotMatch(summary.text, /LLM-generated|would go here/);
 });
+
+test('successor summary includes their own domain and inherited domain knowledge', () => {
+  const successor = structuredClone(context);
+  successor.employee.designation = 'Frontend Engineer';
+  successor.employee.domains = [
+    { source_emp_id: 1, source_name: 'Asha', designation: 'Frontend Engineer', inherited: false, skills: [] },
+    { source_emp_id: 2, source_name: 'Lakshmi', designation: 'HR Executive', inherited: true,
+      skills: [{ name: 'Recruitment', proficiency: 'expert' }] },
+  ];
+  const summary = generateSummary(successor);
+  assert.match(summary.text, /Frontend Engineer/);
+  assert.match(summary.text, /HR Executive from Lakshmi/);
+  assert.match(summary.text, /Recruitment/);
+  assert.deepEqual(summary.sourceLogIds, [1], 'inherited knowledge retains the original work-log attribution');
+  assert.notEqual(fingerprintContext(context), fingerprintContext(successor));
+});
 test('vector literals enforce schema dimensions and reject invalid or zero vectors', () => {
   for (const invalid of [[], Array(1536).fill(0), Array(1536).fill(NaN), Array(1536).fill('1')]) {
     assert.throws(() => vectorLiteral(invalid), /invalid/);
@@ -31,6 +47,11 @@ test('large record summaries stay compact and oversized embedding text is reject
   const large = structuredClone(context);
   large.tasks = Array.from({ length: 300 }, (_, index) => ({ task_id: index + 1,
     title: `Task ${index} ${'x'.repeat(130)}`, status: 'in_progress', priority: index === 0 ? 'critical' : 'low' }));
+  large.employee.domains = Array.from({ length: 300 }, (_, index) => ({
+    source_emp_id: index + 2, source_name: `Source ${index} ${'x'.repeat(80)}`,
+    designation: `Domain ${index} ${'x'.repeat(80)}`, inherited: true,
+    skills: [{ name: `Skill ${index} ${'x'.repeat(70)}` }],
+  }));
   const summary = generateSummary(large);
   assert.ok(summary.text.length < 16000);
   assert.match(summary.text, /showing 10 of 300/);

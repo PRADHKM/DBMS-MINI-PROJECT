@@ -1,6 +1,7 @@
 import { query } from '../../lib/mysql';
 import { requireSession } from '../../lib/auth';
 import { apiHandler } from '../../lib/api';
+import { withEmployeeDomains } from '../../lib/employee-domains';
 
 export default apiHandler(async(req,res)=>{
   const session=await requireSession(req,res);if(!session)return;
@@ -15,5 +16,5 @@ export default apiHandler(async(req,res)=>{
   const projects=await query('SELECT project_id,project_name,status,dept_id FROM PROJECT'+(admin?'':' WHERE project_id IN (SELECT project_id FROM TASK WHERE assigned_to=?)')+' ORDER BY project_name',admin?[]:[id]);
   const tasks=await query('SELECT task_id,title,project_id,assigned_to,status,priority FROM TASK'+(admin?'':' WHERE assigned_to=?')+' ORDER BY title',admin?[]:[id]);
   const [{today}]=await query("SELECT DATE_FORMAT(CURDATE(), '%Y-%m-%d') AS today");
-  return res.status(200).json({departments,employees,projects,tasks,today});
+  return res.status(200).json({departments,employees:await withEmployeeDomains(employees),projects,tasks,today});
 },['GET']);

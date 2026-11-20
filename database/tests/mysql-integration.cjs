@@ -112,6 +112,9 @@ async function main() {
       assert.equal(report.successor_department, 'Engineering');
       assert.equal(report.successor_designation, 'Frontend Engineer');
       assert.deepEqual(report.successor_skills, [{ name: 'React', proficiency: 'advanced' }]);
+      const domains = await q('SELECT source_emp_id,designation,inherited FROM v_employee_domains WHERE emp_id=? ORDER BY inherited', [receiver]);
+      assert.deepEqual(domains.map(domain => domain.designation), ['Frontend Engineer', 'HR Executive']);
+      assert.equal(domains[1].source_emp_id, departing);
       await q('UPDATE WORK_LOG SET notes=?,hours_spent=3 WHERE log_id=?', ['Historical correction', logId]);
       assert.equal(await scalar('SELECT emp_id FROM WORK_LOG WHERE log_id=?', [logId]), departing);
       await reject('CALL sp_process_resignation(?,CURDATE(),CURDATE(),NULL,?)', [departing, receiver]);
@@ -154,6 +157,7 @@ async function main() {
       assert.equal(await scalar('SELECT COUNT(*) FROM RESIGNATION WHERE emp_id=?', [rollback]), 0);
       assert.equal(await scalar('SELECT status FROM EMPLOYEE WHERE emp_id=?', [rollback]), 'active');
       assert.equal(await scalar('SELECT assigned_to FROM TASK WHERE task_id=?', [rollbackTask]), rollback);
+      assert.equal(await scalar('SELECT COUNT(*) FROM v_employee_domains WHERE emp_id=? AND source_emp_id=?', [receiver, rollback]), 0);
       await q(`DROP TRIGGER ${faultTrigger}`); faultTrigger = null;
     });
     await test('task completion timestamps and work-log integrity', async () => {
@@ -164,6 +168,24 @@ async function main() {
       assert.equal(await scalar('SELECT completion_date FROM TASK WHERE task_id=?', [invalidTask]), null);
       await reject('INSERT INTO WORK_LOG (task_id,emp_id,log_date,hours_spent) VALUES (?,?,CURDATE(),1)', [invalidTask, receiver]);
       await reject('INSERT INTO WORK_LOG (task_id,emp_id,log_date,hours_spent) VALUES (?,?,DATE_ADD(CURDATE(),INTERVAL 1 DAY),1)', [invalidTask, invalid]);
+    });
+    await test('domain inheritance follows multiple handovers and safely handles cycles', async () => {
+      const next = await employee('next-successor');
+      await q("UPDATE EMPLOYEE SET designation='Backend Engineer' WHERE emp_id=?", [next]);
+      await q("CALL sp_process_resignation(?,CURDATE(),CURDATE(),'Second handover',?)", [receiver, next]);
+      const domains = await q('SELECT source_emp_id,designation FROM v_employee_domains WHERE emp_id=?', [next]);
+      assert.deepEqual(new Set(domains.map(domain => domain.designation)),
+        new Set(['HR Executive', 'Frontend Engineer', 'Backend Engineer']));
+      assert.equal(await scalar('SELECT assigned_to FROM TASK WHERE task_id=?', [openTask]), next);
+      assert.equal(await scalar('SELECT emp_id FROM WORK_LOG WHERE log_id=?', [logId]), departing);
+      await q('START TRANSACTION');
+      try {
+        // Historical SQL imports can contain a cycle. The reporting view must terminate.
+        await q('UPDATE RESIGNATION SET handover_to=? WHERE emp_id=?', [departing, receiver]);
+        const cycle = await q('SELECT source_emp_id FROM v_employee_domains WHERE emp_id=?', [departing]);
+        assert.deepEqual(new Set(cycle.map(domain => domain.source_emp_id)), new Set([departing, receiver]));
+        assert.equal(cycle.length, 2);
+      } finally { await q('ROLLBACK'); }
     });
     console.log(JSON.stringify({ status: 'passed', tests: passed, skipped, server: await scalar('SELECT VERSION()') }));
   } finally {

@@ -3,13 +3,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { requirePage } from "../components/server";
 import { api, Layout, Field, Alert, Empty, Table, Pill, date } from "../components/ui";
+import { domainNames } from "../lib/domain-names.mjs";
 
-function EmployeeDetails({ name, dept, designation, skills, id }) {
+function EmployeeDetails({ name, dept, designation, skills, domains, id }) {
   if (!name) return "No successor";
   const list = [...(skills || [])].sort((a, b) => a.name.localeCompare(b.name));
   return <div className="handover-person">
     {id ? <Link href={`/employees/${id}`}>{name}</Link> : <strong>{name}</strong>}
-    <span className="cell-subtitle handover-domain">Domain / role: {designation || "Not recorded"}</span>
+    <span className="cell-subtitle handover-domain">Domains: {domainNames({ designation, dept_name: dept, domains }).join(" · ") || "Not recorded"}</span>
     <span className="cell-subtitle">Department: {dept || "Unassigned"}</span>
     <span className="cell-subtitle">Skills: {list.length ? list.map(s => `${s.name} (${s.proficiency})`).join(", ") : "None recorded"}</span>
   </div>;
@@ -137,8 +138,8 @@ export default function Handover() {
       {request?.employee_notes && <p className="notes"><strong>Employee notes</strong> {request.employee_notes}</p>}
       {loading ? <Empty>Loading employees…</Empty> : reviewing ? <div className="review-panel">
         <dl>
-          <div><dt>Departing employee</dt><dd><EmployeeDetails name={departing?.name} dept={departing?.dept_name} designation={departing?.designation} skills={departing?.skills} /></dd></div>
-          <div><dt>New task owner</dt><dd><EmployeeDetails name={successor?.name} dept={successor?.dept_name} designation={successor?.designation} skills={successor?.skills} /></dd></div>
+          <div><dt>Departing employee</dt><dd><EmployeeDetails name={departing?.name} dept={departing?.dept_name} designation={departing?.designation} skills={departing?.skills} domains={departing?.domains} /></dd></div>
+          <div><dt>New task owner</dt><dd><EmployeeDetails name={successor?.name} dept={successor?.dept_name} designation={successor?.designation} skills={successor?.skills} domains={successor?.domains} /></dd></div>
           <div><dt>Resignation date</dt><dd>{dates.resignation_date}</dd></div>
           <div><dt>Last working day</dt><dd>{dates.last_working_day}</dd></div>
         </dl>
@@ -155,7 +156,7 @@ export default function Handover() {
               .filter(employee => field.name !== "handover_to" || employee.emp_id !== departing?.emp_id)
               .map(employee => ({
                 value: employee.emp_id,
-                label: `${employee.name} — ${employee.designation || employee.dept_name || "Unassigned"}`,
+                label: `${employee.name} — ${domainNames(employee).join(" · ") || "Unassigned"}`,
               })) : []}
             onChange={value => setForm(current => ({
               ...current,
@@ -168,7 +169,7 @@ export default function Handover() {
           return <div key={field.name} className="handover-employee-field">
             {control}
             {employee ? <div className="handover-selection" role="group" aria-label={field.name === "emp_id" ? "Selected departing employee" : "Selected successor"}>
-              <EmployeeDetails name={employee.name} dept={employee.dept_name} designation={employee.designation} skills={employee.skills} />
+              <EmployeeDetails name={employee.name} dept={employee.dept_name} designation={employee.designation} skills={employee.skills} domains={employee.domains} />
             </div> : <p className="handover-selection-empty">Choose an employee to see their domain and skills.</p>}
           </div>;
         })}</div>
@@ -184,8 +185,8 @@ export default function Handover() {
       {loading ? <Empty>Loading handovers…</Empty> : history.length ? <Table>
         <thead><tr><th>Departing employee</th><th>Successor</th><th>Status</th><th>Resignation date</th><th>Last working day</th><th>Notes</th></tr></thead>
         <tbody>{history.map(r => <tr key={r.resignation_id}>
-          <td><EmployeeDetails id={r.emp_id} name={r.employee_name} dept={r.employee_department} designation={r.employee_designation} skills={r.employee_skills} /></td>
-          <td><EmployeeDetails id={r.handover_to} name={r.handover_name} dept={r.successor_department} designation={r.successor_designation} skills={r.successor_skills} /></td>
+          <td><EmployeeDetails id={r.emp_id} name={r.employee_name} dept={r.employee_department} designation={r.employee_designation} skills={r.employee_skills} domains={r.employee_domains} /></td>
+          <td><EmployeeDetails id={r.handover_to} name={r.handover_name} dept={r.successor_department} designation={r.successor_designation} skills={r.successor_skills} domains={r.successor_domains} /></td>
           <td><Pill value={r.status} /></td><td>{date(r.resignation_date)}</td><td>{date(r.last_working_day)}</td><td className="notes">{r.handover_notes || "—"}</td>
         </tr>)}</tbody>
       </Table> : <Empty>No handovers have been recorded.</Empty>}

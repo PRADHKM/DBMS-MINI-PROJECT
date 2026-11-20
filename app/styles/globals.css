@@ -126,6 +126,9 @@ button.tab:hover { background: #eaf0e4; }
 .handover-selection .cell-subtitle { font-size: 12px; }
 .handover-selection .handover-domain { color: #314b34; font-weight: 600; }
 .handover-selection-empty { margin: 8px 0 0; color: #5e7059; font-size: 12px; }
+.domain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 14px; margin-top: 16px; }
+.domain-card { padding: 14px; border: 1px solid #dbe3d5; border-radius: 6px; background: #f4f7ef; min-width: 0; }
+.domain-card p { margin-bottom: 0; overflow-wrap: anywhere; }
 .button-row { display: flex; gap: 12px; }
 .auth-page { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; background: #fbfcf8; }
 .auth-intro { padding: 45px 60px; background: var(--nav); color: #edf4e8; display: flex; flex-direction: column; justify-content: space-between; min-height: 100vh; }

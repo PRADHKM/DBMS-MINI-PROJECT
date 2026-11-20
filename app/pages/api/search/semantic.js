@@ -4,6 +4,7 @@ import { loadWorkContext } from '../../../lib/work-context';
 import { embeddingModel } from '../../../lib/ai.mjs';
 import { requireRole } from '../../../lib/auth';
 import { apiHandler, text, assertFields } from '../../../lib/api';
+import { withEmployeeDomains } from '../../../lib/employee-domains';
 
 export default apiHandler(async (req, res) => {
   const session = await requireRole(req, res, ['admin']);
@@ -16,7 +17,7 @@ export default apiHandler(async (req, res) => {
     `SELECT emp_id, name, designation, employment_status AS status
      FROM v_employee_effective_status WHERE emp_id IN (${ids.map(() => '?').join(',')})`, ids
   ) : [];
-  const byId = new Map(employees.map((e) => [e.emp_id, e]));
+  const byId = new Map((await withEmployeeDomains(employees)).map((e) => [e.emp_id, e]));
   const results = await Promise.all(matches.filter((m) => byId.has(m.emp_id)).map(async (match) => {
     const source = await loadWorkContext(match.emp_id);
     return { ...match, employee: byId.get(match.emp_id), stale: source?.fingerprint !== match.source_fingerprint };

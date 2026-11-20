@@ -2,6 +2,7 @@ import { query, getPool } from '../../../lib/mysql';
 import { requireSession, requireRole } from '../../../lib/auth';
 import { apiHandler, text, date, optionalId, enumValue, assertFields, fail, requireRecord, requireAvailableEmployee } from '../../../lib/api';
 import { insertEmployeeAccount, prepareEmployeeAccount } from '../../../lib/employee-account';
+import { withEmployeeDomains } from '../../../lib/employee-domains';
 
 export default apiHandler(async (req, res) => {
   if (req.method === 'GET') {
@@ -17,7 +18,7 @@ export default apiHandler(async (req, res) => {
     if (req.query.dept) { sql += ' AND e.dept_id=?'; params.push(optionalId(req.query.dept, 'dept')); }
     if (req.query.status) { sql += ' AND e.employment_status=?'; params.push(enumValue(req.query.status, 'status', ['active','notice_period','resigned'])); }
     if (req.query.search) { sql += ' AND e.name LIKE ?'; params.push(`%${text(req.query.search, 'search', {max:100})}%`); }
-    return res.status(200).json(await query(sql + ' ORDER BY e.name', params));
+    return res.status(200).json(await withEmployeeDomains(await query(sql + ' ORDER BY e.name', params)));
   }
   const session = await requireRole(req, res, ['admin']); if (!session) return;
   assertFields(req.body, ['name','email','phone','designation','dept_id','manager_id','date_of_joining','username','password','role']);

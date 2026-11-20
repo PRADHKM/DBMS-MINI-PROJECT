@@ -91,6 +91,8 @@ The employee profile page shows the history with **Edit** and **Delete** for adm
 
 Resignation notice and departure are different dates. Recording notice transfers open tasks immediately and preserves completed tasks and historical log authors. The app and handover report show **On notice** through the last working day, when the employee can still sign in. Starting the following day in MySQL's time zone, they show **Resigned** and can no longer sign in. Employees with a recorded resignation cannot receive new assignments or act as a new successor. The handover shows the department, designation and recorded skills for both people. Those skill records remain with their respective employees.
 
+After handover, the successor's profile, directory entry and handover selectors show both their own domain and the inherited domains. The profile lists each inherited domain and its skills with the source employee. Further handovers carry these domains forward. Regenerated contribution summaries include inherited domains and skills for knowledge search. The `v_employee_domains` view supplies this information for existing and new handovers.
+
 Run `npm run handover` from the `app` directory to see current statuses, dates, departments and skills from the same MySQL database as the app. With Docker Compose you can also run `scripts/demo.sh handover`. In any MySQL client, use the reporting views:
 
 ```sql

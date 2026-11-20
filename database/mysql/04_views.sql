@@ -22,6 +22,28 @@ SELECT es.emp_id, JSON_ARRAYAGG(JSON_OBJECT('name', s.skill_name, 'proficiency',
 FROM EMPLOYEE_SKILL es JOIN SKILL s ON s.skill_id = es.skill_id
 GROUP BY es.emp_id;
 
+-- A successor retains their own domain and receives the domains carried by
+-- each incoming handover. Follow further handovers while guarding against cycles.
+CREATE OR REPLACE VIEW v_employee_domains AS
+WITH RECURSIVE handover_domains AS (
+    SELECT emp_id, emp_id AS source_emp_id, JSON_ARRAY(emp_id) AS visited
+    FROM EMPLOYEE
+    UNION ALL
+    SELECT r.handover_to, h.source_emp_id,
+           JSON_ARRAY_APPEND(h.visited, '$', r.handover_to)
+    FROM handover_domains h
+    JOIN RESIGNATION r ON r.emp_id = h.emp_id
+    WHERE r.handover_to IS NOT NULL
+      AND NOT JSON_CONTAINS(h.visited, JSON_ARRAY(r.handover_to))
+)
+SELECT h.emp_id, e.emp_id AS source_emp_id, e.name AS source_name,
+       e.designation, d.dept_name, COALESCE(s.skills, JSON_ARRAY()) AS skills,
+       (h.emp_id <> h.source_emp_id) AS inherited
+FROM (SELECT DISTINCT emp_id, source_emp_id FROM handover_domains) h
+JOIN EMPLOYEE e ON e.emp_id = h.source_emp_id
+LEFT JOIN DEPARTMENT d ON d.dept_id = e.dept_id
+LEFT JOIN v_employee_skills s ON s.emp_id = e.emp_id;
+
 -- View 1: active employee workload summary (for dashboard)
 -- Aggregate each child table independently to avoid multiplying hours by the
 -- number of open tasks when joining two one-to-many relationships.

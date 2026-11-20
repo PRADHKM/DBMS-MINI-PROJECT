@@ -142,14 +142,14 @@ test('HR employee requests resignation and an admin approves their frontend succ
     await expect(page.getByLabel(/^Resignation date/)).toHaveValue(options.today);
     await expect(page.getByLabel(/^Last working day/)).toHaveValue(options.today);
     await expect(page.getByLabel(/^Departing employee/)).toHaveValue(String(emp_id));
-    await expect(page.getByRole('group', { name: 'Selected departing employee' })).toContainText('Domain / role: HR Executive');
+    await expect(page.getByRole('group', { name: 'Selected departing employee' })).toContainText('Domains: HR Executive');
     await expect(page.getByRole('group', { name: 'Selected departing employee' })).toContainText('Department: HR');
     await page.getByLabel(/^Handover to/).selectOption('4');
     const successorDetails = page.getByRole('group', { name: 'Selected successor' });
-    await expect(successorDetails).toContainText('Domain / role: Frontend Engineer');
+    await expect(successorDetails).toContainText('Domains: Frontend Engineer');
     await expect(successorDetails).toContainText('React (expert)');
     await page.getByLabel(/^Handover to/).selectOption('11');
-    await expect(successorDetails).toContainText('Domain / role: Backend Engineer');
+    await expect(successorDetails).toContainText('Domains: Backend Engineer');
     await expect(successorDetails).not.toContainText('Frontend Engineer');
     await page.getByLabel(/^Handover to/).selectOption('4');
     await page.getByRole('button', { name: /Review handover/ }).click();
@@ -167,12 +167,22 @@ test('HR employee requests resignation and an admin approves their frontend succ
     await expect(row).toContainText('On notice');
     const moved = await (await page.request.get(`/api/tasks/${task_id}`)).json();
     expect(moved.assigned_to).toBe(4);
+    await page.goto('/employees/4');
+    const domains = page.getByRole('region', { name: 'Domains and skills' });
+    await expect(domains).toContainText('Frontend Engineer');
+    await expect(domains).toContainText('HR Executive');
+    await expect(domains).toContainText(`Inherited from ${name}'s handover`);
+    await page.goto('/handover');
+    await page.getByLabel(/^Departing employee/).selectOption('4');
+    const inheritedDetails = page.getByRole('group', { name: 'Selected departing employee' });
+    await expect(inheritedDetails).toContainText('Frontend Engineer');
+    await expect(inheritedDetails).toContainText('HR Executive');
     await applicant.getByRole('button', { name: 'Refresh status' }).click();
     const approvedRow = applicant.getByRole('row').filter({
       has: applicant.getByRole('cell', { name: /^approved$/i }),
     });
     await expect(approvedRow).toContainText('Divya Menon');
-    await row.getByRole('link', { name, exact: true }).click();
+    await page.goto(`/employees/${emp_id}`);
     await expect(page.locator('.profile-overview .pill')).toHaveText('On notice');
     await expect(page.getByRole('link', { name: /Start a handover/ })).toHaveCount(0);
     await page.goto('/dashboard');

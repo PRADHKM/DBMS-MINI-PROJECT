@@ -147,6 +147,12 @@ SELECT resigning_employee, designation AS departing_domain_role,
        successor_department, successor_skills, handover_notes
 FROM v_resignation_handover WHERE emp_id = @departing_id;
 
+-- The new employee now shows their own frontend domain and the inherited HR domain.
+SELECT source_name, designation AS domain_role, dept_name, skills, inherited
+FROM v_employee_domains
+WHERE emp_id = @successor_id
+ORDER BY inherited, source_name;
+
 -- 6. Check the stored function and full historical work summary.
 SELECT fn_employee_total_hours(@departing_id, NULL, NULL) AS original_author_hours;
 CALL sp_get_employee_worklog_summary(@departing_id);

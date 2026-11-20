@@ -74,6 +74,14 @@ export function recordSummary({ employee, tasks, worklog }) {
   const completed = tasks.filter((t) => t.status === 'completed');
   const listedProjects = projects.slice(0, 10);
   const sentences = [`${employee.name} (${employee.designation || 'employee'}) has ${worklog.length} work log entries totalling ${hours.toFixed(1)} hours${projects.length ? ` across ${listedProjects.join(', ')}${projects.length > 10 ? ` and ${projects.length - 10} other projects` : ''}` : ''}.`];
+  const inherited = employee.domains?.filter(domain => domain.inherited) || [];
+  if (inherited.length) {
+    sentences.push(`Domains inherited through handovers${inherited.length > 10 ? ` (showing 10 of ${inherited.length})` : ''}: ${inherited.slice(0, 10).map(domain =>
+      `${domain.designation || domain.dept_name || 'Unspecified domain'} from ${domain.source_name}`
+    ).join(', ')}.`);
+    const skills = [...new Set(inherited.flatMap(domain => domain.skills || []).map(skill => skill.name))];
+    if (skills.length) sentences.push(`Inherited domain skills: ${skills.slice(0, 20).join(', ')}${skills.length > 20 ? ` and ${skills.length - 20} other skills` : ''}.`);
+  }
   if (completed.length) sentences.push(`Currently assigned completed tasks${completed.length > 10 ? ` (showing 10 of ${completed.length})` : ''}: ${completed.slice(0, 10).map((t) => t.title).join('; ')}.`);
   sentences.push(open.length
     ? `Open tasks needing continuity${open.length > 10 ? ` (showing 10 of ${open.length}, highest priority first)` : ''}: ${selectTaskEvidence(open, 10).map((t) => `${t.title} (${t.status.replaceAll('_', ' ')})`).join('; ')}.`

@@ -298,6 +298,11 @@ test('HTTP workflow against isolated seeded databases', { timeout: 180000 }, asy
     assert.equal(approved.status, 'approved');
     assert.equal(approved.last_working_day, shiftedDay(8));
     assert.equal((await betaClient.request('/api/tasks/' + transferTask)).assigned_to, beta);
+    const successorProfile = await betaClient.request('/api/employees/' + beta);
+    assert.ok(successorProfile.employee.domains.some(domain => domain.source_emp_id === employeeId && domain.inherited));
+    assert.ok(successorProfile.employee.domains.some(domain => domain.source_emp_id === beta && !domain.inherited));
+    const combinedSummary = await betaClient.request('/api/employees/' + beta + '/summary', { method: 'POST' }, 201);
+    assert.ok(combinedSummary.summary_text.includes('Domains inherited through handovers'));
     assert.equal((await applicant.request('/api/employees/' + employeeId)).employee.status, 'notice_period');
     assert.ok(!(await admin.request('/api/resignation-requests')).some(row => row.request_id === second));
   });

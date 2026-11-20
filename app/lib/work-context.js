@@ -1,5 +1,6 @@
 import { query } from './mysql';
 import { fingerprintContext } from './ai.mjs';
+import { loadEmployeeDomains } from './employee-domains';
 
 export async function loadWorkContext(empId) {
   const employee = (await query(
@@ -8,6 +9,7 @@ export async function loadWorkContext(empId) {
      FROM v_employee_effective_status WHERE emp_id = ?`, [empId]
   ))[0];
   if (!employee) return null;
+  employee.domains = (await loadEmployeeDomains([empId])).get(empId);
   const [tasks, worklog] = await Promise.all([
     query(`SELECT t.task_id, t.title, t.status, t.priority, t.due_date, p.project_name
            FROM TASK t JOIN PROJECT p ON p.project_id=t.project_id

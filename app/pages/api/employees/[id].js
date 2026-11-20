@@ -3,6 +3,7 @@ import { requireSession, requireRole } from '../../../lib/auth';
 import { apiHandler, parseId, optionalId, text, date, assertFields, canAccessEmployee, fail, deleteWithoutHistory } from '../../../lib/api';
 import { insertEmployeeAccount, prepareEmployeeAccount } from '../../../lib/employee-account';
 import { requireNoResignation } from '../../../lib/resignation-requests';
+import { loadEmployeeDomains } from '../../../lib/employee-domains';
 
 export default apiHandler(async (req, res) => {
   const session = await requireSession(req,res); if (!session) return;
@@ -15,6 +16,7 @@ export default apiHandler(async (req, res) => {
   employee.status = employee.employment_status;
   delete employee.employment_status;
   if (req.method === 'GET') {
+    employee.domains = (await loadEmployeeDomains([id])).get(id);
     if (session.user.role === 'admin') {
       const [account] = await query('SELECT username FROM USER_ACCOUNT WHERE emp_id=?', [id]);
       employee.login_username = account?.username ?? null;
