@@ -42,7 +42,7 @@ Honest limits to mention: embeddings come from the offline `local-hash-v1` model
 scripts/demo.sh sql      # tables, views, function, procedure, constraint error, DML (rolled back), advanced queries, pgvector CRUD
 scripts/demo.sh handover # current resignation status, dates, and both employees' roles and skills
 scripts/demo.sh rbac     # MySQL roles: employee role denied on USER_ACCOUNT and DELETE; admin role allowed data but not DDL
-scripts/demo.sh api      # auth, summary, similarity search, vector edit and delete, handover
+scripts/demo.sh api      # auth, summary, vector search and edits, employee resignation request, admin approval
 scripts/demo.sh search "your own question"
 ```
 

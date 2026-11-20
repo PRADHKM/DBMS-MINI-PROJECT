@@ -107,13 +107,15 @@ test('employee sees only their records and cannot open admin pages or other prof
   expect(errors).toEqual([]);
 });
 
-test('HR to frontend handover displays both roles and updates notice status', async ({ page }) => {
+test('HR employee requests resignation and an admin approves their frontend successor', async ({ page, browser, baseURL }) => {
   const errors = observeErrors(page);
   await login(page, process.env.WMS_TEST_ADMIN || 'ravi.shankar');
   const options = await (await page.request.get('/api/options')).json();
   const name = `Browser HR ${Date.now()}`;
+  const username = name.replaceAll(' ', '.').toLowerCase();
   const employeeResponse = await page.request.post('/api/employees', { data: {
     name, email: `${name.replaceAll(' ', '-')}@example.test`, date_of_joining: '2020-01-01', dept_id: 3, designation: 'HR Executive',
+    username, password,
   } });
   expect(employeeResponse.status()).toBe(201);
   const { emp_id } = await employeeResponse.json();
@@ -122,11 +124,33 @@ test('HR to frontend handover displays both roles and updates notice status', as
   } });
   expect(taskResponse.status()).toBe(201);
   const { task_id } = await taskResponse.json();
+  const employeeContext = await browser.newContext({ baseURL });
+  const applicant = await employeeContext.newPage();
+  const applicantErrors = observeErrors(applicant);
   try {
+    await login(applicant, username);
+    await applicant.getByRole('link', { name: 'Resignation', exact: true }).click();
+    await expect(applicant.getByLabel(/^Proposed last working day/)).toHaveValue(options.today);
+    await applicant.getByLabel('Notes for the admin').fill('Please arrange a successor for my open work.');
+    await applicant.getByRole('button', { name: 'Submit request' }).click();
+    await expect(applicant.getByRole('row').filter({ hasText: /pending/i })).toBeVisible();
+
     await page.goto('/handover');
+    const pendingRow = page.getByRole('row').filter({ hasText: name });
+    await expect(pendingRow).toContainText('Please arrange a successor for my open work.');
+    await pendingRow.getByRole('button', { name: 'Review request' }).click();
     await expect(page.getByLabel(/^Resignation date/)).toHaveValue(options.today);
     await expect(page.getByLabel(/^Last working day/)).toHaveValue(options.today);
-    await page.getByLabel(/^Departing employee/).selectOption(String(emp_id));
+    await expect(page.getByLabel(/^Departing employee/)).toHaveValue(String(emp_id));
+    await expect(page.getByRole('group', { name: 'Selected departing employee' })).toContainText('Domain / role: HR Executive');
+    await expect(page.getByRole('group', { name: 'Selected departing employee' })).toContainText('Department: HR');
+    await page.getByLabel(/^Handover to/).selectOption('4');
+    const successorDetails = page.getByRole('group', { name: 'Selected successor' });
+    await expect(successorDetails).toContainText('Domain / role: Frontend Engineer');
+    await expect(successorDetails).toContainText('React (expert)');
+    await page.getByLabel(/^Handover to/).selectOption('11');
+    await expect(successorDetails).toContainText('Domain / role: Backend Engineer');
+    await expect(successorDetails).not.toContainText('Frontend Engineer');
     await page.getByLabel(/^Handover to/).selectOption('4');
     await page.getByRole('button', { name: /Review handover/ }).click();
     const review = page.locator('.review-panel');
@@ -135,7 +159,7 @@ test('HR to frontend handover displays both roles and updates notice status', as
     await expect(review).toContainText('Department: Engineering');
     await expect(review).toContainText('Frontend Engineer');
     await expect(review).toContainText('React (expert)');
-    await page.getByRole('button', { name: 'Confirm handover' }).click();
+    await page.getByRole('button', { name: 'Approve resignation' }).click();
 
     const row = page.getByRole('row').filter({ has: page.getByRole('link', { name, exact: true }) });
     await expect(row.getByRole('cell').nth(0)).toContainText('Department: HR');
@@ -143,15 +167,22 @@ test('HR to frontend handover displays both roles and updates notice status', as
     await expect(row).toContainText('On notice');
     const moved = await (await page.request.get(`/api/tasks/${task_id}`)).json();
     expect(moved.assigned_to).toBe(4);
+    await applicant.getByRole('button', { name: 'Refresh status' }).click();
+    const approvedRow = applicant.getByRole('row').filter({
+      has: applicant.getByRole('cell', { name: /^approved$/i }),
+    });
+    await expect(approvedRow).toContainText('Divya Menon');
     await row.getByRole('link', { name, exact: true }).click();
     await expect(page.locator('.profile-overview .pill')).toHaveText('On notice');
     await expect(page.getByRole('link', { name: /Start a handover/ })).toHaveCount(0);
     await page.goto('/dashboard');
     await expect(page.getByRole('row').filter({ hasText: name })).toContainText('On notice');
   } finally {
+    await employeeContext.close();
     await page.request.delete(`/api/tasks/${task_id}`);
   }
   expect(errors).toEqual([]);
+  expect(applicantErrors).toEqual([]);
 });
 
 test('mobile login and authenticated workspace fit without horizontal overflow', async ({ page }) => {

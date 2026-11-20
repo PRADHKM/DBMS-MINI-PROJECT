@@ -1,6 +1,8 @@
 // Live API walk-through for the demo. Run through scripts/demo.sh api.
 // Creates uniquely named fixtures (one employee, one task, one resignation) so it
 // can be repeated; the handover record is intentionally retained as audit history.
+import { randomBytes } from 'node:crypto';
+
 const base = (process.env.WMS_URL || 'http://localhost:3000').replace(/\/$/, '');
 const stamp = Date.now().toString(36);
 
@@ -58,53 +60,75 @@ const mine = expect('employee can open own profile', await employee.call('/api/e
 const me = mine?.employee ?? mine;
 show('own profile', me && `${me.name} (${me.designation}), ${me.dept_name}`);
 
-step('2. Contribution summary + embedding (pgvector write)');
-const summary = expect('admin generates summary for Ananya (emp 2)', await admin.call('/api/employees/2/summary', { method: 'POST' }), 200, 201);
-if (summary) {
-  show('method', summary.generation_method);
-  show('summary', clip(summary.summary_text, 240));
-}
-const cached = expect('second read returns cached snapshot', await admin.call('/api/employees/2/summary'), 200);
-if (summary && cached) show('same snapshot id', String(cached.summary_id === summary.summary_id) + ` (stale=${cached.stale})`);
-
-step('3. Semantic search (pgvector cosine ranking)');
-const found = expect('admin searches "payment gateway load testing"', await admin.call('/api/search/semantic', { method: 'POST', body: { question: 'payment gateway load testing' } }), 200);
-for (const r of found?.results ?? []) show(`${r.employee.name} (${r.employee.status})`, `similarity ${Number(r.similarity ?? r.score ?? 0).toFixed(3)} stale=${r.stale}`);
-show('embedding model', found?.embedding_model);
-
-step('4. Vector read / update (re-embed) / delete');
-if (summary) {
-  const id = summary.summary_id;
-  const hist = expect('employee reads own snapshot history', await employee.call('/api/employees/2/summaries'), 200);
-  show('snapshots', Array.isArray(hist) ? hist.length : hist);
-  expect('employee cannot edit a snapshot', await employee.call(`/api/summaries/${id}`, { method: 'PUT', body: { summary_text: 'nope' } }), 403);
-  const edited = expect('admin edits snapshot (re-embeds)', await admin.call(`/api/summaries/${id}`, { method: 'PUT',
-    body: { summary_text: `Demo edit ${stamp}: led Kubernetes migration and cluster upgrade work.` } }), 200);
-  if (edited) show('generation_method after edit', edited.generation_method);
-  const k8s = expect('search now finds the edited snapshot', await admin.call('/api/search/semantic', { method: 'POST', body: { question: 'Kubernetes cluster migration' } }), 200);
-  show('top hit', k8s?.results?.[0]?.employee?.name);
-  expect('admin deletes the edited snapshot', await admin.call(`/api/summaries/${id}`, { method: 'DELETE' }), 200, 204);
-  expect('deleted snapshot is gone', await admin.call(`/api/summaries/${id}`), 404);
-}
-
-step('5. Resignation handover (atomic task transfer)');
+step('2. Create a demo employee with their own login and an open task');
 const options = expect('read database date and handover options', await admin.call('/api/options'), 200);
 const today = options?.today;
 const hrDepartment = options?.departments?.find(d => d.dept_name === 'HR');
 check('database date and HR department are available', Boolean(today && hrDepartment));
+if (!today || !hrDepartment) process.exit(1);
 const day = (n) => new Date(Date.parse(`${today}T00:00:00Z`) + n * 86400000).toISOString().slice(0, 10);
-const emp = today && hrDepartment && expect('create demo employee', await admin.call('/api/employees', { method: 'POST', body: {
-  name: `Demo Leaver ${stamp}`, email: `demo.leaver.${stamp}@example.test`, designation: 'HR Executive',
-  dept_id: hrDepartment.dept_id, date_of_joining: day(-60) } }), 201);
-if (emp?.emp_id) {
-  const task = expect('assign an open task to them', await admin.call('/api/tasks', { method: 'POST', body: {
-    project_id: 1, assigned_to: emp.emp_id, title: `Demo handover task ${stamp}`, status: 'in_progress', priority: 'high',
-    start_date: day(-5), due_date: day(10) } }), 201);
-  expect('self-handover is rejected', await admin.call('/api/resignations', { method: 'POST', body: {
-    emp_id: emp.emp_id, resignation_date: day(0), last_working_day: day(14), handover_notes: 'self', handover_to: emp.emp_id } }), 400);
-  expect('record resignation, hand over to Divya (Frontend Engineer)', await admin.call('/api/resignations', { method: 'POST', body: {
-    emp_id: emp.emp_id, resignation_date: day(0), last_working_day: day(14),
-    handover_notes: 'Demo handover: Divya takes over the open task.', handover_to: 4 } }), 201);
+const username = `demo.leaver.${stamp}`;
+const password = randomBytes(24).toString('base64url');
+const emp = expect('create demo employee and login', await admin.call('/api/employees', { method: 'POST', body: {
+  name: `Demo Leaver ${stamp}`, email: `${username}@example.test`, designation: 'HR Executive',
+  dept_id: hrDepartment.dept_id, date_of_joining: day(-60), username, password } }), 201);
+if (!emp?.emp_id) process.exit(1);
+const applicant = new Client();
+expect('demo employee signs in with their own username', await applicant.login(username, password), 200);
+const task = expect('assign an open task to them', await admin.call('/api/tasks', { method: 'POST', body: {
+  project_id: 1, assigned_to: emp.emp_id, title: `Demo handover task ${stamp}`, status: 'in_progress', priority: 'high',
+  start_date: day(-5), due_date: day(10) } }), 201);
+if (!task?.task_id) process.exit(1);
+
+step('3. Contribution summary + embedding (pgvector write)');
+const summaryPath = `/api/employees/${emp.emp_id}/summary`;
+const summary = expect('admin generates a summary for the demo employee', await admin.call(summaryPath, { method: 'POST' }), 201);
+if (summary) {
+  show('method', summary.generation_method);
+  show('summary', clip(summary.summary_text, 240));
+}
+const cached = expect('second read returns cached snapshot', await admin.call(summaryPath), 200);
+check('same snapshot id and current source records', Boolean(summary?.summary_id && cached?.summary_id === summary.summary_id && !cached.stale));
+
+step('4. Semantic search (pgvector cosine ranking)');
+const found = expect('admin searches for the demo task', await admin.call('/api/search/semantic', { method: 'POST', body: { question: `Demo handover task ${stamp}` } }), 200);
+for (const r of found?.results ?? []) show(`${r.employee.name} (${r.employee.status})`, `similarity ${Number(r.similarity ?? r.score ?? 0).toFixed(3)} stale=${r.stale}`);
+show('embedding model', found?.embedding_model);
+check('search returns the demo snapshot', Boolean(summary?.summary_id && found?.results?.some(r => r.summary_id === summary.summary_id)));
+
+step('5. Vector read / update (re-embed) / delete');
+if (summary?.summary_id) {
+  const id = summary.summary_id;
+  const hist = expect('employee reads own snapshot history', await applicant.call(`/api/employees/${emp.emp_id}/summaries`), 200);
+  show('snapshots', Array.isArray(hist) ? hist.length : hist);
+  expect('employee cannot edit a snapshot', await applicant.call(`/api/summaries/${id}`, { method: 'PUT', body: { summary_text: 'nope' } }), 403);
+  const editedTopic = `orchidquartz${stamp} payroll migration`;
+  const edited = expect('admin edits snapshot (re-embeds)', await admin.call(`/api/summaries/${id}`, { method: 'PUT',
+    body: { summary_text: `Demo edit: documented ${editedTopic}.` } }), 200);
+  if (edited) show('generation_method after edit', edited.generation_method);
+  const ranked = expect('search now finds the edited snapshot', await admin.call('/api/search/semantic', { method: 'POST', body: { question: editedTopic } }), 200);
+  check('edited snapshot ranks first for its new topic', ranked?.results?.[0]?.summary_id === id);
+  expect('admin deletes the edited snapshot', await admin.call(`/api/summaries/${id}`, { method: 'DELETE' }), 200, 204);
+  expect('deleted snapshot is gone', await admin.call(`/api/summaries/${id}`), 404);
+}
+
+step('6. Employee resignation request and admin approval');
+const request = expect('HR employee submits their resignation request', await applicant.call('/api/resignation-requests', {
+  method: 'POST', body: { proposed_last_day: day(14), employee_notes: 'Please arrange a successor for my open work.' },
+}), 201);
+if (request?.request_id) {
+  const queue = expect('admin reads the pending request queue', await admin.call('/api/resignation-requests'), 200);
+  check('request appears in the admin queue', Array.isArray(queue) && queue.some(r => r.request_id === request.request_id));
+  const pendingTask = expect('employee still sees own task before approval', await applicant.call(`/api/tasks/${task.task_id}`), 200);
+  check('pending request keeps existing task ownership', pendingTask?.assigned_to === emp.emp_id);
+  const reviewPath = `/api/resignation-requests/${request.request_id}`;
+  const approval = { decision: 'approved', last_working_day: day(14), handover_notes: 'Divya takes over the open task.', handover_to: 4 };
+  expect('employee cannot approve their own request', await applicant.call(reviewPath, { method: 'PUT', body: approval }), 403);
+  expect('self-handover is rejected', await admin.call(reviewPath, { method: 'PUT', body: { ...approval, handover_to: emp.emp_id } }), 400);
+  expect('admin approves Divya (Frontend Engineer) as successor', await admin.call(reviewPath, { method: 'PUT', body: approval }), 200);
+  const decisions = expect('employee reads their decision', await applicant.call('/api/resignation-requests'), 200);
+  check('employee sees approval and Divya as successor', Array.isArray(decisions)
+    && decisions.some(r => r.request_id === request.request_id && r.status === 'approved' && r.successor_name === 'Divya Menon'));
   const rows = expect('read back recorded handover', await admin.call('/api/resignations'), 200);
   const row = Array.isArray(rows) && rows.find(r => r.emp_id === emp.emp_id);
   check('employee is on notice and both departments are shown', row?.status === 'notice_period'

@@ -48,6 +48,7 @@ cmd_setup() {
   # The MySQL image only runs init files on a new volume. Refresh these views
   # on existing volumes too; CREATE OR REPLACE leaves all table data intact.
   docker compose exec -T mysql sh -c 'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mysql -uroot < /docker-entrypoint-initdb.d/04_views.sql'
+  docker compose exec -T mysql sh -c 'MYSQL_PWD="$MYSQL_ROOT_PASSWORD" exec mysql -uroot < /docker-entrypoint-initdb.d/10_resignation_requests.sql'
 
   say "2/4 Application config"
   if [ ! -f "$APP/.env.local" ]; then
@@ -128,11 +129,19 @@ CALL sp_get_employee_worklog_summary(2);
 SQL
 
   say "MySQL: constraint rejects invalid data (25 hours in a day; error expected)"
-  mysql_run <<'SQL' 2>&1 | sed 's/^/   /' || true
+  local rejected
+  if rejected=$(mysql_run <<'SQL' 2>&1
 SET @t = (SELECT MIN(task_id) FROM TASK WHERE assigned_to = 2 AND status <> 'completed');
 INSERT INTO WORK_LOG (task_id, emp_id, log_date, hours_spent, notes)
 VALUES (@t, 2, CURDATE(), 25, 'demo: should be rejected');
 SQL
+  ); then
+    die "MySQL accepted the invalid 25-hour work log"
+  fi
+  printf '%s\n' "$rejected" | sed 's/^/   /'
+  if ! grep -Eq 'ERROR 3819.*chk_hours_positive|ERROR 1644.*24 hours' <<< "$rejected"; then
+    die "MySQL did not reject the work log for the expected hours constraint"
+  fi
 
   say "MySQL: DML demo (INSERT/UPDATE/DELETE/joins/HAVING; all rolled back)"
   mysql_run <"$ROOT/database/mysql/03_dml_demo.sql"
@@ -171,8 +180,8 @@ cmd_test() {
   say "Unit/vector tests"; (cd "$APP" && npm test)
   say "MySQL integration"; (cd "$APP" && WMS_DB_TESTS=1 npm run test:db)
   if app_up; then
-    say "HTTP integration (creates retained fixtures)"; (cd "$APP" && npm run test:http)
-    say "Concurrency"; (cd "$APP" && node --env-file=.env.local --test tests/concurrency.integration.mjs)
+    say "HTTP integration (creates retained fixtures)"; (cd "$APP" && WMS_TEST_URL="$URL" npm run test:http)
+    say "Concurrency"; (cd "$APP" && WMS_TEST_URL="$URL" node --env-file=.env.local --test tests/concurrency.integration.mjs)
     note "browser tests: cd app && CHROME_PATH=\$(which google-chrome) npm run test:browser"
   else
     note "app not running - skipped HTTP/concurrency tests"

@@ -80,10 +80,10 @@ td select { width: auto; min-width: 132px; font-size: 12px; min-height: 33px; pa
 .notes { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 600px; }
 .count { color: #5c7054; background: #f0f4ec; padding: 4px 9px; border-radius: 5px; font-size: 10px; white-space: nowrap; }
 .pill { display: inline-block; padding: 3px 9px; background: #edf1ea; color: #63705d; border-radius: 5px; font-size: 10px; text-transform: capitalize; font-weight: 600; white-space: nowrap; }
-.pill.active, .pill.completed { color: #286b45; background: #e6f3e6; }
-.pill.resigned, .pill.blocked, .pill.critical { color: #9c493b; background: #f8e8e2; }
+.pill.active, .pill.completed, .pill.approved { color: #286b45; background: #e6f3e6; }
+.pill.resigned, .pill.blocked, .pill.critical, .pill.declined { color: #9c493b; background: #f8e8e2; }
 .pill.in_progress, .pill.ongoing { color: #326179; background: #e9f1f4; }
-.pill.high, .pill.on_hold, .pill.notice_period { color: #825b1e; background: #fbf0d9; }
+.pill.high, .pill.on_hold, .pill.notice_period, .pill.pending { color: #825b1e; background: #fbf0d9; }
 .notice { border: 1px solid #eed4ca; background: #fff3ec; color: #9f4a36; padding: 12px 15px; border-radius: 7px; font-size: 13px; margin-bottom: 18px; overflow-wrap: anywhere; }
 .notice.success { border-color: #d0e1c8; background: #edf7e8; color: #3e6934; }
 .notice a { display: inline-block; margin-top: 3px; }
@@ -121,6 +121,11 @@ button.tab:hover { background: #eaf0e4; }
 .review-panel p { font-size: 13px; color: #526b49; }
 .handover-person { min-width: 145px; }
 .handover-person .cell-subtitle { font-weight: 400; }
+.handover-employee-field { min-width: 0; }
+.handover-selection { margin-top: 10px; padding: 12px 14px; border: 1px solid #dbe3d5; background: #f4f7ef; border-radius: 6px; }
+.handover-selection .cell-subtitle { font-size: 12px; }
+.handover-selection .handover-domain { color: #314b34; font-weight: 600; }
+.handover-selection-empty { margin: 8px 0 0; color: #5e7059; font-size: 12px; }
 .button-row { display: flex; gap: 12px; }
 .auth-page { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; background: #fbfcf8; }
 .auth-intro { padding: 45px 60px; background: var(--nav); color: #edf4e8; display: flex; flex-direction: column; justify-content: space-between; min-height: 100vh; }

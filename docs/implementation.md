@@ -294,6 +294,8 @@ Editing a snapshot (admin) replaces text and embedding in one `UPDATE`, so they 
 
 ## 10. Resignation and handover
 
+Employees submit requests on `/resignation` from their own accounts. `RESIGNATION_REQUEST` stores the proposed last day, notes and decision, with one pending request per employee. Admins review the queue on `/handover`, select a successor and confirm the last day. Approval updates the request and inserts the existing `RESIGNATION` record in one transaction. The resignation triggers validate the handover and transfer the open tasks. A failed transfer rolls back the decision. Pending requests route through the review queue, and declined requests remain visible to the employee.
+
 `POST /api/resignations` validates input (including self-handover) then calls `sp_process_resignation` inside the database. The procedure:
 
 1. Starts its own transaction.

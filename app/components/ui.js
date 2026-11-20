@@ -28,7 +28,7 @@ export function Layout({ title, subtitle, children, action }) {
   const router = useRouter();
   const pathname = router.asPath.split(/[?#]/)[0];
   const admin = session?.user?.role === "admin";
-  const links = [["/dashboard", "Overview"], ["/tasks", "Tasks"], ["/worklogs", "Work logs"], ...(admin ? [["/manage", "People & projects"], ["/handover", "Handover"]] : [[`/employees/${session?.user?.empId}`, "My profile"]])];
+  const links = [["/dashboard", "Overview"], ["/tasks", "Tasks"], ["/worklogs", "Work logs"], ...(admin ? [["/manage", "People & projects"], ["/handover", "Handover"]] : [[`/employees/${session?.user?.empId}`, "My profile"], ["/resignation", "Resignation"]])];
   return <div className="app-shell">
     <aside className="sidebar">
       <Link className="brand" href="/dashboard"><span className="brand-mark">W</span><span>Workload<span className="brand-caption">Knowledge stays with the team</span></span></Link>
@@ -43,7 +43,7 @@ export function Field({ field, value, onChange, options = [] }) {
   const id = `field-${field.name}`;
   const shared = { id, name: field.name, value: value ?? "", onChange: e => onChange(e.target.value), required: !!field.required, disabled: !!field.disabled };
   return <label className={field.wide ? "field wide" : "field"} htmlFor={id}><span>{field.label}{field.required && <span aria-hidden="true"> *</span>}</span>
-    {field.type === "select" ? <select {...shared}><option value="">{field.required ? "Select an option" : "None"}</option>{options.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select> : field.type === "textarea" ? <textarea {...shared} rows={3} maxLength={field.maxLength || 10000} /> : <input {...shared} type={field.type || "text"} min={field.min} max={field.max} step={field.step} maxLength={field.maxLength || (field.type === "password" ? 72 : 150)} autoComplete={field.type === "password" ? "new-password" : undefined} />}
+    {field.type === "select" ? <select {...shared}><option value="">{field.required ? "Select an option" : "None"}</option>{options.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select> : field.type === "textarea" ? <textarea {...shared} rows={3} maxLength={field.maxLength || 10000} /> : <input {...shared} type={field.type || "text"} min={field.min} max={field.max} step={field.step} minLength={field.minLength} maxLength={field.maxLength || (field.type === "password" ? 72 : 150)} autoComplete={field.type === "password" ? "new-password" : undefined} />}
     {field.help && <small>{field.help}</small>}
   </label>;
 }

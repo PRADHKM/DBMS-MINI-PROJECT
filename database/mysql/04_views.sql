@@ -7,11 +7,13 @@ USE workload_management_system;
 -- a past last working day takes effect without a scheduled database job.
 CREATE OR REPLACE VIEW v_employee_effective_status AS
 SELECT e.*, r.resignation_date, r.last_working_day,
-       CASE WHEN e.status = 'resigned' OR r.last_working_day < CURDATE()
-            THEN 'resigned' ELSE 'active' END AS effective_status,
-       CASE WHEN e.status = 'resigned' OR r.last_working_day < CURDATE() THEN 'resigned'
-            WHEN r.emp_id IS NOT NULL THEN 'notice_period'
-            ELSE 'active' END AS employment_status
+       CAST(CASE WHEN e.status = 'resigned' OR r.last_working_day < CURDATE()
+                 THEN 'resigned' ELSE 'active' END AS CHAR CHARACTER SET utf8mb4)
+           COLLATE utf8mb4_0900_ai_ci AS effective_status,
+       CAST(CASE WHEN e.status = 'resigned' OR r.last_working_day < CURDATE() THEN 'resigned'
+                 WHEN r.emp_id IS NOT NULL THEN 'notice_period'
+                 ELSE 'active' END AS CHAR CHARACTER SET utf8mb4)
+           COLLATE utf8mb4_0900_ai_ci AS employment_status
 FROM EMPLOYEE e
 LEFT JOIN RESIGNATION r ON r.emp_id = e.emp_id;
 

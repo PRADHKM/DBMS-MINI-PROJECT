@@ -43,6 +43,7 @@ async function main() {
     await test('employee role cannot read credentials, resignations or handover view', async () => {
       await denied(emp, 'SELECT password_hash FROM USER_ACCOUNT', DENIED.table);
       await denied(emp, 'SELECT * FROM RESIGNATION', DENIED.table);
+      await denied(emp, 'SELECT * FROM RESIGNATION_REQUEST', DENIED.table);
       await denied(emp, 'SELECT * FROM v_resignation_handover', DENIED.table);
     });
     await test('employee role can only change progress fields and own phone column', async () => {

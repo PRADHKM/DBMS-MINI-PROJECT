@@ -1,6 +1,8 @@
 import { query, getPool } from '../../../lib/mysql';
 import { requireSession, requireRole } from '../../../lib/auth';
 import { apiHandler, parseId, optionalId, text, date, assertFields, canAccessEmployee, fail, deleteWithoutHistory } from '../../../lib/api';
+import { insertEmployeeAccount, prepareEmployeeAccount } from '../../../lib/employee-account';
+import { requireNoResignation } from '../../../lib/resignation-requests';
 
 export default apiHandler(async (req, res) => {
   const session = await requireSession(req,res); if (!session) return;
@@ -13,20 +15,26 @@ export default apiHandler(async (req, res) => {
   employee.status = employee.employment_status;
   delete employee.employment_status;
   if (req.method === 'GET') {
+    if (session.user.role === 'admin') {
+      const [account] = await query('SELECT username FROM USER_ACCOUNT WHERE emp_id=?', [id]);
+      employee.login_username = account?.username ?? null;
+    }
     const tasks = await query(`SELECT t.*,p.project_name FROM TASK t JOIN PROJECT p ON p.project_id=t.project_id WHERE t.assigned_to=? ORDER BY t.status,t.due_date`,[id]);
     const worklog = await query(`SELECT w.*,t.title AS task_title,p.project_name FROM WORK_LOG w JOIN TASK t ON t.task_id=w.task_id JOIN PROJECT p ON p.project_id=t.project_id WHERE w.emp_id=? ORDER BY w.log_date DESC,w.log_id DESC`,[id]);
     return res.status(200).json({employee,tasks,worklog});
   }
   if (req.method === 'PUT') {
-    const fields = session.user.role==='admin' ? ['name','email','phone','designation','dept_id','manager_id','date_of_joining'] : ['phone'];
-    assertFields(req.body,fields);
+    const admin = session.user.role === 'admin';
+    const fields = admin ? ['name','email','phone','designation','dept_id','manager_id','date_of_joining'] : ['phone'];
+    assertFields(req.body, admin ? [...fields, 'username', 'password', 'role'] : fields);
+    const account = admin ? await prepareEmployeeAccount(req.body) : null;
     const values={};
-    for (const field of Object.keys(req.body)) {
+    for (const field of fields.filter(field => Object.hasOwn(req.body, field))) {
       if (['dept_id','manager_id'].includes(field)) values[field]=optionalId(req.body[field],field);
       else if (field==='date_of_joining') values[field]=date(req.body[field],field,{required:true});
       else values[field]=text(req.body[field],field,{required:['name','email'].includes(field),max:field==='phone'?15:100});
     }
-    if(!Object.keys(values).length)fail(400,'No fields to update');
+    if(!Object.keys(values).length && !account)fail(400,'No fields to update');
     if(values.email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email))fail(400,'A valid email is required');
     const conn=await getPool().getConnection();
     try {
@@ -36,9 +44,9 @@ export default apiHandler(async (req, res) => {
         // Hierarchy changes are rare in this mini-project. Locking the small
         // employee set in one consistent order serializes competing A-to-B/B-to-A
         // edits, so each cycle walk observes the previous committed hierarchy.
-        [employees]=await conn.query('SELECT emp_id,manager_id FROM EMPLOYEE ORDER BY emp_id FOR UPDATE');
+        [employees]=await conn.query('SELECT emp_id,manager_id,status FROM EMPLOYEE ORDER BY emp_id FOR UPDATE');
       } else {
-        [employees]=await conn.execute('SELECT emp_id,manager_id FROM EMPLOYEE WHERE emp_id=? FOR UPDATE',[id]);
+        [employees]=await conn.execute('SELECT emp_id,manager_id,status FROM EMPLOYEE WHERE emp_id=? FOR UPDATE',[id]);
       }
       const current=employees.find(row=>row.emp_id===id);
       if(!current)fail(404,'Employee not found');
@@ -57,15 +65,24 @@ export default apiHandler(async (req, res) => {
       if(values.date_of_joining) {
         const [conflicts]=await conn.execute(`SELECT
           (SELECT COUNT(*) FROM WORK_LOG WHERE emp_id=? AND log_date<?)+
-          (SELECT COUNT(*) FROM RESIGNATION WHERE emp_id=? AND resignation_date<?) AS total`,
-          [id,values.date_of_joining,id,values.date_of_joining]);
+          (SELECT COUNT(*) FROM RESIGNATION WHERE emp_id=? AND resignation_date<?)+
+          (SELECT COUNT(*) FROM RESIGNATION_REQUEST WHERE emp_id=? AND submitted_on<?) AS total`,
+          [id,values.date_of_joining,id,values.date_of_joining,id,values.date_of_joining]);
         if(conflicts[0].total)fail(409,'Joining date cannot move after recorded work or resignation history');
       }
       if(values.dept_id) {
         const [departments]=await conn.execute('SELECT dept_id FROM DEPARTMENT WHERE dept_id=?',[values.dept_id]);
         if(!departments.length)fail(404,'Department not found');
       }
-      await conn.execute(`UPDATE EMPLOYEE SET ${Object.keys(values).map(field=>field+'=?').join(',')} WHERE emp_id=?`,[...Object.values(values),id]);
+      if (account) {
+        await requireNoResignation(conn, current);
+        const [accounts] = await conn.execute('SELECT user_id FROM USER_ACCOUNT WHERE emp_id=? FOR UPDATE', [id]);
+        if (accounts.length) fail(409, 'This employee already has a login.');
+        await insertEmployeeAccount(conn, id, account);
+      }
+      if (Object.keys(values).length) {
+        await conn.execute(`UPDATE EMPLOYEE SET ${Object.keys(values).map(field=>field+'=?').join(',')} WHERE emp_id=?`,[...Object.values(values),id]);
+      }
       await conn.commit();return res.status(200).json({success:true});
     }catch(err){await conn.rollback();throw err;}finally{conn.release();}
   }
@@ -73,7 +90,8 @@ export default apiHandler(async (req, res) => {
   if (id===Number(session.user.empId)) fail(400,'You cannot delete your own account');
   await deleteWithoutHistory('EMPLOYEE','emp_id',id,`SELECT
     (SELECT COUNT(*) FROM WORK_LOG WHERE emp_id=?) + (SELECT COUNT(*) FROM TASK WHERE assigned_to=?) +
-    (SELECT COUNT(*) FROM RESIGNATION WHERE emp_id=? OR handover_to=?) AS total`,[id,id,id,id],
+    (SELECT COUNT(*) FROM RESIGNATION WHERE emp_id=? OR handover_to=?) +
+    (SELECT COUNT(*) FROM RESIGNATION_REQUEST WHERE emp_id=?) AS total`,[id,id,id,id,id],
     'This employee has work or handover history. Use the resignation workflow to preserve it.');
   return res.status(204).end();
 },['GET','PUT','DELETE']);

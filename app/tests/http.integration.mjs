@@ -256,6 +256,51 @@ test('HTTP workflow against isolated seeded databases', { timeout: 180000 }, asy
     await admin.request('/api/departments/' + department, { method: 'PUT', body: { head_emp_id: alpha } }, 400);
     await admin.request('/api/departments', { method: 'POST', body: { dept_name: prefix + ' invalid new head', head_emp_id: departed } }, 400);
   });
+  await t.test('employees request their own resignation and only an admin can approve the handover', async () => {
+    const employeeId = (await createEmployee(admin, 'requester', department, { username: null, password: null })).emp_id;
+    const credentials = { username: prefix + '_requester', password, role: 'employee' };
+    const applicant = new Client();
+    await applicant.login(credentials.username, password, 401);
+    await admin.request('/api/employees/' + employeeId, { method: 'PUT', body: credentials });
+    await admin.request('/api/employees/' + employeeId, { method: 'PUT', body: credentials }, 409);
+    assert.equal((await admin.request('/api/employees/' + employeeId)).employee.login_username, credentials.username);
+    await applicant.login(credentials.username);
+    const transferTask = (await admin.request('/api/tasks', { method: 'POST', body: {
+      project_id: project, assigned_to: employeeId, title: prefix + ' approval task',
+    } }, 201)).task_id;
+    const body = { proposed_last_day: shiftedDay(7), employee_notes: 'Open task needs a new owner' };
+    await anonymous.request('/api/resignation-requests', {}, 401);
+    await applicant.request('/api/resignation-requests', { method: 'POST', body: { ...body, emp_id: beta } }, 400);
+    const submit = () => applicant.request('/api/resignation-requests', { method: 'POST', body }, 201);
+    const first = (await submit()).request_id;
+    await applicant.request('/api/resignation-requests', { method: 'POST', body }, 409);
+    assert.ok((await admin.request('/api/resignation-requests')).some(row => row.request_id === first && row.emp_id === employeeId));
+    assert.ok(!(await betaClient.request('/api/resignation-requests')).some(row => row.request_id === first));
+    assert.equal((await admin.request('/api/tasks/' + transferTask)).assigned_to, employeeId);
+    assert.equal((await applicant.request('/api/employees/' + employeeId)).employee.status, 'active');
+    const decide = (client, id, body, expected = 200) => client.request('/api/resignation-requests/' + id, { method: 'PUT', body }, expected);
+    await decide(applicant, first, { decision: 'declined' }, 403);
+    await admin.request('/api/resignations', { method: 'POST', body: {
+      emp_id: employeeId, resignation_date: today, last_working_day: shiftedDay(7), handover_to: beta,
+    } }, 400);
+    await decide(admin, first, { decision: 'declined' });
+    assert.equal((await applicant.request('/api/resignation-requests'))[0].status, 'declined');
+    const second = (await submit()).request_id;
+    const approval = { decision: 'approved', last_working_day: shiftedDay(8), handover_to: beta };
+    await decide(admin, second, { ...approval, handover_to: employeeId }, 400);
+    await decide(admin, second, { ...approval, handover_to: null }, 400);
+    assert.equal((await applicant.request('/api/resignation-requests'))[0].status, 'pending',
+      'an invalid handover rolls back the approval');
+    assert.equal((await admin.request('/api/tasks/' + transferTask)).assigned_to, employeeId);
+    await decide(admin, second, approval);
+    await decide(admin, second, approval, 409);
+    const [approved] = await applicant.request('/api/resignation-requests');
+    assert.equal(approved.status, 'approved');
+    assert.equal(approved.last_working_day, shiftedDay(8));
+    assert.equal((await betaClient.request('/api/tasks/' + transferTask)).assigned_to, beta);
+    assert.equal((await applicant.request('/api/employees/' + employeeId)).employee.status, 'notice_period');
+    assert.ok(!(await admin.request('/api/resignation-requests')).some(row => row.request_id === second));
+  });
   await t.test('unused records can be updated and deleted without losing history', async () => {
     const unusedDept = (await admin.request('/api/departments', { method: 'POST', body: { dept_name: prefix + ' disposable' } }, 201)).dept_id;
     const unusedProject = (await admin.request('/api/projects', { method: 'POST', body: { project_name: prefix + ' disposable', dept_id: unusedDept } }, 201)).project_id;

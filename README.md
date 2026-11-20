@@ -26,14 +26,28 @@ Open **http://localhost:3000**. `NEXTAUTH_URL` must match the browser URL, inclu
 |---|---|---|
 | Admin | `ravi.shankar` | `Passw0rd!` |
 | Employee | `ananya.rao` | `Passw0rd!` |
+| Employee | `divya.menon` | `Passw0rd!` |
 
-These are local demonstration accounts; passwords in the database are genuine bcrypt hashes. A resigned employee cannot sign in. Admins can create new employees with an optional username, password and role from **Manage → Employees**.
+Each active demo employee has a unique login username. The demo accounts share a local demo password. Use **People & projects → Employees** to see the usernames and set up a login for an existing active employee who needs one. When adding an employee there, choose a unique username and an initial password.
 
 Compose binds MySQL to `127.0.0.1:3307` and PostgreSQL to `127.0.0.1:5433` to avoid common existing database ports. Change Compose's `WMS_MYSQL_PORT` / `WMS_PG_PORT` and the matching application environment values if needed. Override demo passwords in Compose and the application together for another environment. `docker compose stop` stops services while preserving their data.
 
-Initialization runs only for new named volumes. This release targets a fresh database; it does not silently migrate an older scaffold database. Use a separate Compose project name for a new installation if existing volumes must be preserved. Do not execute the example DML files as startup migrations.
+Initialization runs only for new named volumes. For an existing installation of this project, run `scripts/demo.sh setup` from a stopped app. To upgrade manually, open the Compose MySQL client and apply the views and request migration before starting the updated app.
+
+```powershell
+docker compose exec mysql mysql -u root -p
+```
+
+```sql
+SOURCE /docker-entrypoint-initdb.d/04_views.sql;
+SOURCE /docker-entrypoint-initdb.d/10_resignation_requests.sql;
+```
+
+For native MySQL, use `database/mysql/04_views.sql` and `database/mysql/10_resignation_requests.sql` from the repository directory. Existing employee accounts, tasks and resignation history are retained.
 
 ## Demo
+
+Use the [annotated terminal commands](docs/terminal-commands.md) for a step-by-step walkthrough with before-and-after trigger examples.
 
 One command runs everything for a presentation: `scripts/demo.sh all` (databases, app, extra sample data, summaries, SQL/RBAC/API walkthroughs and a similarity-search showcase). See [docs/demo.md](docs/demo.md) for the talk track and `scripts/demo.sh` for individual steps (`populate`, `search "question"`, `sql`, `rbac`, `api`, `test`, `reset`). `database/mysql/09_demo_extra.sql` holds the optional extra data; Compose does not load it.
 
@@ -44,7 +58,8 @@ One command runs everything for a presentation: `scripts/demo.sh all` (databases
 - **Tasks:** admin assignment and editing; employees can update the status of their own tasks.
 - **Work logs:** employees record and edit their work; admins can manage logs. Author and task remain immutable on edits. Daily hours cannot exceed 24, and dates must fall between joining and today.
 - **Employee profile:** contribution history, assigned tasks, phone editing and cached summaries with source counts and stale-data feedback.
-- **Handover:** admin records resignation, last working day, notes and an eligible successor; the database atomically transfers open tasks.
+- **Resignation:** employees submit a proposed last working day and track whether the request is pending, approved or declined.
+- **Handover:** admins review pending requests, confirm the last working day and choose an eligible successor. Approval and open-task transfer happen in one transaction. Admins can also record a resignation received outside the app.
 
 Employees can access only their own profile, tasks and work logs. API checks re-read the account's current role and employment eligibility, including for already signed-in sessions. Employee project/task options are scoped to their assignments; department names are shared reference data.
 
